@@ -342,5 +342,5 @@ app.get('/admin-dashboard.html', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`🚀 Food Pantry Tracker running on http://localhost:${PORT}`);
+    console.log(`Food Pantry Tracker running on http://localhost:${PORT}`);
 });
