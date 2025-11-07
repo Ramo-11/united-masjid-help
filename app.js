@@ -68,7 +68,7 @@ initGoals.run('alfajr', 500);
 initGoals.run('alhuda', 500);
 
 // Admin password
-const ADMIN_PASSWORD = 'admin123'; // Change this!
+const ADMIN_PASSWORD = 'UnitedMasjid25!';
 
 // Middleware
 app.use(express.static('public'));
