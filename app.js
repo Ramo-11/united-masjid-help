@@ -1,14 +1,25 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const Database = require('better-sqlite3');
 const session = require('express-session');
 const SqliteStore = require('better-sqlite3-session-store')(session);
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Database setup
 const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pantry.db';
+
+console.log(`dbPath: ${dbPath}`);
+
+// Ensure DB directory exists
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
 const db = new Database(dbPath);
 
 // Initialize database tables
@@ -62,13 +73,12 @@ db.exec(`
 const initGoals = db.prepare(`
   INSERT OR IGNORE INTO pantry_goals (pantry, goal) VALUES (?, ?)
 `);
-
 initGoals.run('almumineen', 500);
 initGoals.run('alfajr', 500);
 initGoals.run('alhuda', 500);
 
 // Admin password
-const ADMIN_PASSWORD = 'UnitedMasjid25!';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Middleware
 app.use(express.static('public'));
@@ -113,7 +123,6 @@ function getCurrentWeekTotal(pantry) {
 
 // API Routes
 
-// Get all pantry data
 app.get('/api/pantries', (req, res) => {
     const goals = db.prepare('SELECT * FROM pantry_goals').all();
     const pantries = goals.map((g) => ({
@@ -124,7 +133,6 @@ app.get('/api/pantries', (req, res) => {
     res.json(pantries);
 });
 
-// Update pantry goal (admin)
 app.post('/api/admin/goal/:pantry', (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -139,7 +147,6 @@ app.post('/api/admin/goal/:pantry', (req, res) => {
     res.json({ success: true });
 });
 
-// Record donation
 app.post('/api/donations', (req, res) => {
     const { pantry, amount, type, items } = req.body;
 
@@ -154,7 +161,6 @@ app.post('/api/donations', (req, res) => {
     res.json({ success: true, current: getCurrentWeekTotal(pantry) });
 });
 
-// Get donation history
 app.get('/api/donations', (req, res) => {
     const { pantry } = req.query;
 
@@ -173,7 +179,6 @@ app.get('/api/donations', (req, res) => {
     }
 });
 
-// Clear donations for specific pantry (admin)
 app.delete('/api/admin/donations/:pantry', (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -190,7 +195,6 @@ app.delete('/api/admin/donations/:pantry', (req, res) => {
     res.json({ success: true });
 });
 
-// Get all volunteer slots
 app.get('/api/slots', (req, res) => {
     const slots = db.prepare('SELECT * FROM volunteer_slots ORDER BY date ASC').all();
 
@@ -204,7 +208,6 @@ app.get('/api/slots', (req, res) => {
     res.json(slotsWithCounts);
 });
 
-// Add volunteer slot (admin)
 app.post('/api/admin/slots', (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -222,7 +225,6 @@ app.post('/api/admin/slots', (req, res) => {
     res.json({ success: true });
 });
 
-// Delete volunteer slot (admin)
 app.delete('/api/admin/slots/:id', (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -230,15 +232,12 @@ app.delete('/api/admin/slots/:id', (req, res) => {
 
     const { id } = req.params;
 
-    // Delete volunteers for this slot
     db.prepare('DELETE FROM volunteers WHERE slot_id = ?').run(id);
-    // Delete the slot
     db.prepare('DELETE FROM volunteer_slots WHERE id = ?').run(id);
 
     res.json({ success: true });
 });
 
-// Clear volunteers for specific slot (admin)
 app.delete('/api/admin/volunteers/:slotId', (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
@@ -255,11 +254,9 @@ app.delete('/api/admin/volunteers/:slotId', (req, res) => {
     res.json({ success: true });
 });
 
-// Register volunteer
 app.post('/api/volunteers', (req, res) => {
     const { slotId, name, email, phone } = req.body;
 
-    // Check if slot is full
     const slot = db.prepare('SELECT max_volunteers FROM volunteer_slots WHERE id = ?').get(slotId);
     const count = db
         .prepare('SELECT COUNT(*) as count FROM volunteers WHERE slot_id = ?')
@@ -279,7 +276,6 @@ app.post('/api/volunteers', (req, res) => {
     res.json({ success: true });
 });
 
-// Get all volunteers (admin)
 app.get('/api/admin/volunteers', (req, res) => {
     const volunteers = db
         .prepare(
@@ -295,7 +291,6 @@ app.get('/api/admin/volunteers', (req, res) => {
     res.json(volunteers);
 });
 
-// Verify admin password
 app.post('/api/admin/verify', (req, res) => {
     const { password } = req.body;
 
@@ -307,12 +302,10 @@ app.post('/api/admin/verify', (req, res) => {
     }
 });
 
-// Check admin authentication
 app.get('/api/admin/check', (req, res) => {
     res.json({ authenticated: req.session.adminAuthenticated === true });
 });
 
-// Admin logout
 app.post('/api/admin/logout', (req, res) => {
     req.session.adminAuthenticated = false;
     res.json({ success: true });
