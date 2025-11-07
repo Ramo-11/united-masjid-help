@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Login</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Food Pantry Donation Tracker</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="volunteer.html">Volunteer Sign-Up</a>
+                <a href="admin-login.html" class="active">Admin</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="form-container" style="max-width: 400px">
+                <h2>Admin Login</h2>
+                <p>Please enter your password to access the admin dashboard.</p>
+
+                <form id="admin-login-form">
+                    <div class="form-group">
+                        <label for="admin-password">Password</label>
+                        <input type="password" id="admin-password" required autofocus />
+                    </div>
+
+                    <div id="error-message" class="error-message" style="display: none">
+                        Incorrect password. Please try again.
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="button" onclick="location.href='/'" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made by <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a></p>
+        </footer>
+
+        <script src="js/admin-login.js"></script>
+    </body>
+</html>

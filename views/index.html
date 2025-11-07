@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Food Pantry Donation Tracker</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Food Pantry Donation Tracker</h1>
+            <nav>
+                <a href="/" class="active">Home</a>
+                <a href="volunteer.html">Volunteer Sign-Up</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="intro">
+                <h2>Support Our Community Food Pantries</h2>
+                <p>Track donations and help us reach our weekly goal of $500 per pantry!</p>
+            </div>
+
+            <div class="pantries-grid">
+                <div class="pantry-card priority" data-pantry="almumineen">
+                    <h3>Al-Mumineen Food Pantry</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-almumineen"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="amount-almumineen">$0</span> / $<span id="goal-almumineen"
+                                >500</span
+                            >
+                        </div>
+                    </div>
+                    <div class="donation-flow">
+                        <p class="flow-instruction">Step 1: Donate online</p>
+                        <a
+                            href="https://sites.google.com/view/lutspantry/make-a-donation"
+                            target="_blank"
+                            class="btn btn-primary"
+                            >Donate Online Now</a
+                        >
+                        <p class="flow-instruction">Step 2: Record your donation</p>
+                        <button
+                            onclick="location.href='donate.html?pantry=almumineen'"
+                            class="btn btn-secondary"
+                        >
+                            Record My Donation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pantry-card" data-pantry="alfajr">
+                    <h3>Al-Fajr Food Pantry</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-alfajr"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="amount-alfajr">$0</span> / $<span id="goal-alfajr">500</span>
+                        </div>
+                    </div>
+                    <div class="donation-flow">
+                        <p class="flow-instruction">Step 1: Donate online</p>
+                        <a
+                            href="https://secure-api.net/give/v7/imca-food-pantry"
+                            target="_blank"
+                            class="btn btn-primary"
+                            >Donate Online Now</a
+                        >
+                        <p class="flow-instruction">Step 2: Record your donation</p>
+                        <button
+                            onclick="location.href='donate.html?pantry=alfajr'"
+                            class="btn btn-secondary"
+                        >
+                            Record My Donation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pantry-card" data-pantry="alhuda">
+                    <h3>Al-Huda Food Pantry</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-alhuda"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="amount-alhuda">$0</span> / $<span id="goal-alhuda">500</span>
+                        </div>
+                    </div>
+                    <div class="donation-flow">
+                        <p class="flow-instruction">Step 1: Donate online</p>
+                        <a
+                            href="https://us.mohid.co/in/fishers/alhudafishers/masjid/online/donation"
+                            target="_blank"
+                            class="btn btn-primary"
+                            >Donate Online Now</a
+                        >
+                        <p class="flow-instruction">Step 2: Record your donation</p>
+                        <button
+                            onclick="location.href='donate.html?pantry=alhuda'"
+                            class="btn btn-secondary"
+                        >
+                            Record My Donation
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reset-info">
+                <p>Progress resets every Monday at 12:00 AM</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made by <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a></p>
+        </footer>
+
+        <script src="js/index.js"></script>
+    </body>
+</html>

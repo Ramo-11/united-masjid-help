@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Record Donation</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Food Pantry Donation Tracker</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="volunteer.html">Volunteer Sign-Up</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="form-container">
+                <h2>Record Donation for <span id="pantry-name"></span></h2>
+
+                <form id="donation-form">
+                    <div class="form-group">
+                        <label>Donation Type</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="donationType" value="money" checked />
+                                <span>Money</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="donationType" value="items" />
+                                <span>Items</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="money-section">
+                        <div class="form-group">
+                            <label for="money-amount">Amount ($)</label>
+                            <input
+                                type="number"
+                                id="money-amount"
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                            />
+                        </div>
+                    </div>
+
+                    <div id="items-section" style="display: none">
+                        <div class="items-grid">
+                            <!-- Staples -->
+                            <div class="item-category">
+                                <h4>Staples</h4>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="5"
+                                        data-name="Rice (4-5 lbs)"
+                                    />
+                                    Rice (4-5 lbs) - $5
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="4"
+                                        data-name="Flour (4-5 lbs)"
+                                    />
+                                    Flour (4-5 lbs) - $4
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="4"
+                                        data-name="Sugar (4-5 lbs)"
+                                    />
+                                    Sugar (4-5 lbs) - $4
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="8"
+                                        data-name="Oil (48-90 oz)"
+                                    />
+                                    Oil (48-90 oz) - $8
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="2"
+                                        data-name="Salt & Pepper"
+                                    />
+                                    Salt & Pepper - $2
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="5"
+                                        data-name="Dry Beans/Lentils (1-2 lbs)"
+                                    />
+                                    Dry Beans/Lentils (1-2 lbs) - $5
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Cereal"
+                                    />
+                                    Cereal - $3
+                                </label>
+                            </div>
+
+                            <!-- Canned & Packaged -->
+                            <div class="item-category">
+                                <h4>Canned & Packaged</h4>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="2"
+                                        data-name="Kidney/Black Beans (cans)"
+                                    />
+                                    Kidney/Black Beans (cans) - $2
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Canned Tuna"
+                                    />
+                                    Canned Tuna - $3
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="4"
+                                        data-name="Pancake Mix & Syrup"
+                                    />
+                                    Pancake Mix & Syrup - $4
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="5"
+                                        data-name="Peanut Butter & Jelly"
+                                    />
+                                    Peanut Butter & Jelly - $5
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Tomato Sauces"
+                                    />
+                                    Tomato Sauces - $3
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="2"
+                                        data-name="Ramen Noodles"
+                                    />
+                                    Ramen Noodles - $2
+                                </label>
+                                <label>
+                                    <input type="checkbox" name="item" value="2" data-name="Oats" />
+                                    Oats - $2
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Pasta (1 lb)"
+                                    />
+                                    Pasta (1 lb) - $3
+                                </label>
+                            </div>
+
+                            <!-- Hygiene Products -->
+                            <div class="item-category">
+                                <h4>Hygiene Products</h4>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Dish Detergent"
+                                    />
+                                    Dish Detergent - $3
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="8"
+                                        data-name="Laundry Detergent"
+                                    />
+                                    Laundry Detergent - $8
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="4"
+                                        data-name="Shampoo"
+                                    />
+                                    Shampoo - $4
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="5"
+                                        data-name="Feminine Hygiene Products"
+                                    />
+                                    Feminine Hygiene Products - $5
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Soap Bar/Body Wash"
+                                    />
+                                    Soap Bar/Body Wash - $3
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="3"
+                                        data-name="Tooth Paste"
+                                    />
+                                    Tooth Paste - $3
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="2"
+                                        data-name="Tooth Brush"
+                                    />
+                                    Tooth Brush - $2
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="4"
+                                        data-name="Razors"
+                                    />
+                                    Razors - $4
+                                </label>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="item"
+                                        value="6"
+                                        data-name="Toilet Paper"
+                                    />
+                                    Toilet Paper - $6
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <strong>Selected Items Total: $<span id="items-total">0</span></strong>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Record Donation</button>
+                        <button type="button" onclick="location.href='/'" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made by <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a></p>
+        </footer>
+
+        <script src="js/donate.js"></script>
+    </body>
+</html>

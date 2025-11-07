@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Admin Dashboard</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="volunteer.html">Volunteer Sign-Up</a>
+                <a href="admin-dashboard.html" class="active">Admin</a>
+                <a href="#" onclick="logout()" style="color: #ff6b6b">Logout</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchTab('pantries')">Pantry Goals</button>
+                <button class="tab-btn" onclick="switchTab('volunteers')">Volunteer Slots</button>
+                <button class="tab-btn" onclick="switchTab('signups')">Volunteer Sign-ups</button>
+                <button class="tab-btn" onclick="switchTab('donations')">Donation History</button>
+            </div>
+
+            <!-- Pantry Goals Tab -->
+            <div id="pantries-tab" class="tab-content active">
+                <h2>Configure Pantry Weekly Goals</h2>
+
+                <div class="admin-section">
+                    <h3>Al-Mumineen Food Pantry</h3>
+                    <div class="form-group">
+                        <label for="goal-almumineen">Weekly Goal ($)</label>
+                        <input type="number" id="goal-almumineen" min="0" step="1" value="500" />
+                    </div>
+                    <button onclick="updateGoal('almumineen')" class="btn btn-primary">
+                        Update Goal
+                    </button>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Al-Fajr Food Pantry</h3>
+                    <div class="form-group">
+                        <label for="goal-alfajr">Weekly Goal ($)</label>
+                        <input type="number" id="goal-alfajr" min="0" step="1" value="500" />
+                    </div>
+                    <button onclick="updateGoal('alfajr')" class="btn btn-primary">
+                        Update Goal
+                    </button>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Al-Huda Food Pantry</h3>
+                    <div class="form-group">
+                        <label for="goal-alhuda">Weekly Goal ($)</label>
+                        <input type="number" id="goal-alhuda" min="0" step="1" value="500" />
+                    </div>
+                    <button onclick="updateGoal('alhuda')" class="btn btn-primary">
+                        Update Goal
+                    </button>
+                </div>
+            </div>
+
+            <!-- Volunteer Slots Tab -->
+            <div id="volunteers-tab" class="tab-content">
+                <h2>Manage Volunteer Slots</h2>
+
+                <div class="admin-section">
+                    <h3>Add New Volunteer Slot</h3>
+                    <form id="add-slot-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="slot-date">Date</label>
+                                <input type="date" id="slot-date" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="slot-time">Time</label>
+                                <input
+                                    type="text"
+                                    id="slot-time"
+                                    placeholder="9:00am - 12:00pm"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="slot-location">Location Name</label>
+                            <input
+                                type="text"
+                                id="slot-location"
+                                placeholder="MTI Daycare Basement"
+                                required
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="slot-address">Address</label>
+                            <input
+                                type="text"
+                                id="slot-address"
+                                placeholder="2850 Cold Spring Rd"
+                            />
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="slot-type">Type</label>
+                                <select id="slot-type" required>
+                                    <option value="Distribution">Distribution</option>
+                                    <option value="Transportation">Transportation</option>
+                                    <option value="Distribution & Transportation">
+                                        Distribution & Transportation
+                                    </option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="slot-max">Max Volunteers</label>
+                                <input type="number" id="slot-max" min="1" value="10" required />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Add Volunteer Slot</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Existing Volunteer Slots</h3>
+                    <div id="slots-list"></div>
+                </div>
+            </div>
+
+            <!-- Volunteer Sign-ups Tab -->
+            <div id="signups-tab" class="tab-content">
+                <h2>Volunteer Sign-ups</h2>
+                <div class="admin-section">
+                    <div class="button-group" style="margin-bottom: 1rem">
+                        <button onclick="exportVolunteers()" class="btn btn-secondary">
+                            Export to CSV
+                        </button>
+                        <button
+                            onclick="clearAllSignups()"
+                            class="btn"
+                            style="background: #dc3545; color: white"
+                        >
+                            Clear All Sign-ups
+                        </button>
+                    </div>
+                    <div id="signups-list"></div>
+                </div>
+            </div>
+
+            <!-- Donation History Tab -->
+            <div id="donations-tab" class="tab-content">
+                <h2>Donation History</h2>
+                <div class="admin-section">
+                    <div class="button-group" style="margin-bottom: 1rem">
+                        <button onclick="exportDonations()" class="btn btn-secondary">
+                            Export to CSV
+                        </button>
+                        <button
+                            onclick="clearPantryDonations('almumineen')"
+                            class="btn"
+                            style="background: #17a2b8; color: white"
+                        >
+                            Clear Al-Mumineen
+                        </button>
+                        <button
+                            onclick="clearPantryDonations('alfajr')"
+                            class="btn"
+                            style="background: #17a2b8; color: white"
+                        >
+                            Clear Al-Fajr
+                        </button>
+                        <button
+                            onclick="clearPantryDonations('alhuda')"
+                            class="btn"
+                            style="background: #17a2b8; color: white"
+                        >
+                            Clear Al-Huda
+                        </button>
+                        <button
+                            onclick="clearAllDonations()"
+                            class="btn"
+                            style="background: #dc3545; color: white"
+                        >
+                            Clear All Donations
+                        </button>
+                    </div>
+
+                    <div class="donation-filters" style="margin-bottom: 1.5rem">
+                        <label style="margin-right: 1rem">
+                            <strong>Filter by Pantry:</strong>
+                        </label>
+                        <label style="margin-right: 1rem">
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="all"
+                                checked
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>All</span>
+                        </label>
+                        <label style="margin-right: 1rem">
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="almumineen"
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>Al-Mumineen</span>
+                        </label>
+                        <label style="margin-right: 1rem">
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="alfajr"
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>Al-Fajr</span>
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="alhuda"
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>Al-Huda</span>
+                        </label>
+                    </div>
+
+                    <div id="donations-list"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made by <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a></p>
+        </footer>
+
+        <script src="js/admin-dashboard.js"></script>
+    </body>
+</html>

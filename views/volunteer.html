@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Volunteer Sign-Up</title>
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header>
+            <h1>Food Pantry Donation Tracker</h1>
+            <nav>
+                <a href="/">Home</a>
+                <a href="volunteer.html" class="active">Volunteer Sign-Up</a>
+            </nav>
+        </header>
+
+        <main class="container">
+            <div class="form-container">
+                <h2>Volunteer Sign-Up</h2>
+                <p>
+                    Thank you for your interest in volunteering! Please select a time slot and
+                    provide your information.
+                </p>
+
+                <form id="volunteer-form">
+                    <div class="form-group">
+                        <label for="volunteer-name">Full Name *</label>
+                        <input type="text" id="volunteer-name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteer-email">Email *</label>
+                        <input type="email" id="volunteer-email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteer-phone">Phone Number *</label>
+                        <input
+                            type="tel"
+                            id="volunteer-phone"
+                            required
+                            placeholder="(123) 456-7890"
+                        />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteer-slot">Select Time Slot *</label>
+                        <select id="volunteer-slot" required>
+                            <option value="">-- Choose a time slot --</option>
+                        </select>
+                    </div>
+
+                    <div class="volunteer-details" id="volunteer-details" style="display: none">
+                        <h4>Selected Time Slot Details:</h4>
+                        <p id="slot-details"></p>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                        <button type="button" onclick="location.href='/'" class="btn btn-secondary">
+                            Back to Home
+                        </button>
+                    </div>
+                </form>
+
+                <div id="success-message" class="success-message" style="display: none">
+                    <h3>✓ Thank you for signing up!</h3>
+                    <p>We've recorded your volunteer information. We look forward to seeing you!</p>
+                    <button onclick="location.reload()" class="btn btn-primary">
+                        Sign Up Another Volunteer
+                    </button>
+                </div>
+            </div>
+
+            <div class="volunteer-list">
+                <h3>Upcoming Volunteer Opportunities</h3>
+                <div class="opportunities-grid" id="opportunities-list">
+                    <p class="no-data">Loading volunteer opportunities...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Made by <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a></p>
+        </footer>
+
+        <script src="js/volunteer.js"></script>
+    </body>
+</html>
