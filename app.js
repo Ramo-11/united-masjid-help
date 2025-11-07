@@ -9,8 +9,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Database setup
-const dbPath =
-    process.env.NODE_ENV === 'production' ? path.join(__dirname, 'pantry.db') : 'pantry.db';
+const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pantry.db';
+
 const db = new Database(dbPath);
 
 // Initialize database tables
