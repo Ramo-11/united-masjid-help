@@ -321,23 +321,23 @@ app.post('/api/admin/logout', (req, res) => {
 
 // Serve static HTML files
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
 app.get('/donate.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'donate.html'));
+    res.sendFile(path.join(__dirname, 'views', 'donate.html'));
 });
 
 app.get('/volunteer.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'volunteer.html'));
+    res.sendFile(path.join(__dirname, 'views', 'volunteer.html'));
 });
 
 app.get('/admin-login.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin-login.html'));
+    res.sendFile(path.join(__dirname, 'views', 'admin-login.html'));
 });
 
 app.get('/admin-dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'admin-dashboard.html'));
+    res.sendFile(path.join(__dirname, 'views', 'admin-dashboard.html'));
 });
 
 app.listen(PORT, () => {
