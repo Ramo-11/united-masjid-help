@@ -3,6 +3,7 @@ const path = require('path');
 const Database = require('better-sqlite3');
 const session = require('express-session');
 const SqliteStore = require('better-sqlite3-session-store')(session);
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -69,7 +70,7 @@ initGoals.run('alfajr', 500);
 initGoals.run('alhuda', 500);
 
 // Admin password
-const ADMIN_PASSWORD = 'admin123'; // Change this!
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 // Middleware
 app.use(express.static('public'));
