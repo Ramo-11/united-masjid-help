@@ -667,6 +667,141 @@
     }
 }
 
+/* External Link Styles */
+.external-link-item {
+    cursor: pointer;
+}
+
+.external-link-item:hover {
+    text-decoration: none;
+}
+
+.external-link-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 3rem;
+}
+
+.external-link-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.external-link-label {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* External Link YouTube Embed */
+.youtube-embed-container {
+    position: relative;
+    width: 90vw;
+    max-width: 1400px;
+    aspect-ratio: 16 / 9;
+    background: #000;
+}
+
+.youtube-embed-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.facebook-embed-container {
+    position: relative;
+    width: 90vw;
+    max-width: 600px;
+    min-height: 500px;
+    background: #fff;
+}
+
+.facebook-embed-container iframe {
+    width: 100%;
+    min-height: 500px;
+    border: none;
+}
+
+.external-link-preview {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.external-link-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.external-link-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.external-link-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s ease;
+}
+
+.external-link-item:hover .external-link-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.external-link-play-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #ff0000;
+    transition: transform 0.3s ease;
+}
+
+.external-link-item:hover .external-link-play-icon {
+    transform: scale(1.1);
+}
+
+/* Admin link form styling */
+#admin-links-list .gallery-item-admin a {
+    color: #667eea;
+    word-break: break-all;
+}
+
+#admin-links-list .gallery-item-admin a:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .gallery-section h2 {
         font-size: 1.5rem;

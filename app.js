@@ -71,6 +71,15 @@ db.exec(`
   group_id TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS external_links (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  url TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  type TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `);
 
 cloudinary.config({
@@ -461,6 +470,60 @@ app.delete('/api/admin/media/group/:groupId', async (req, res) => {
     }
 });
 
+// Get all external links
+app.get('/api/external-links', (req, res) => {
+    const links = db.prepare('SELECT * FROM external_links ORDER BY created_at DESC').all();
+
+    const enrichedLinks = links.map((link) => {
+        if (link.type === 'youtube') {
+            return {
+                ...link,
+                embedUrl: getYouTubeEmbedUrl(link.url),
+                thumbnail: getYouTubeThumbnail(link.url),
+            };
+        } else if (link.type === 'facebook') {
+            return {
+                ...link,
+                embedUrl: getFacebookEmbedUrl(link.url),
+            };
+        }
+        return link;
+    });
+
+    res.json(enrichedLinks);
+});
+
+// Add external link (admin)
+app.post('/api/admin/external-links', (req, res) => {
+    if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { url, title, description, type } = req.body;
+
+    const stmt = db.prepare(`
+        INSERT INTO external_links (url, title, description, type)
+        VALUES (?, ?, ?, ?)
+    `);
+
+    stmt.run(url, title, description || '', type);
+
+    res.json({ success: true });
+});
+
+// Delete external link (admin)
+app.delete('/api/admin/external-links/:id', (req, res) => {
+    if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+
+    db.prepare('DELETE FROM external_links WHERE id = ?').run(id);
+
+    res.json({ success: true });
+});
+
 // Serve static HTML files
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -485,3 +548,26 @@ app.get('/admin-dashboard.html', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Food Pantry Tracker running on http://localhost:${PORT}`);
 });
+
+function getYouTubeEmbedUrl(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11 ? `https://www.youtube.com/embed/${match[2]}` : null;
+}
+
+function getYouTubeThumbnail(url) {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return match && match[2].length === 11
+        ? `https://img.youtube.com/vi/${match[2]}/maxresdefault.jpg`
+        : null;
+}
+
+function getFacebookEmbedUrl(url) {
+    // Facebook post URLs come in various formats
+    // Example: https://www.facebook.com/username/posts/123456789
+    // Example: https://www.facebook.com/permalink.php?story_fbid=123&id=456
+    return `https://www.facebook.com/plugins/post.php?href=${encodeURIComponent(
+        url
+    )}&width=500&show_text=true`;
+}

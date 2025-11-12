@@ -4,6 +4,7 @@ let selectedFiles = [];
 document.addEventListener('DOMContentLoaded', function () {
     setupFileUpload();
     loadAdminGallery();
+    loadExternalLinks();
 });
 
 function setupFileUpload() {
@@ -278,5 +279,119 @@ async function deleteMediaGroup(groupId, mediaTitle) {
     } catch (error) {
         console.error('Error:', error);
         alert('Error deleting media.');
+    }
+}
+
+async function addExternalLink(e) {
+    e.preventDefault();
+
+    const url = document.getElementById('link-url').value.trim();
+    const title = document.getElementById('link-title').value.trim();
+    const description = document.getElementById('link-description').value.trim();
+    const type = document.getElementById('link-type').value;
+
+    try {
+        const response = await fetch('/api/admin/external-links', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ url, title, description, type, password: adminPassword }),
+        });
+
+        if (response.ok) {
+            alert('Link added successfully!');
+            document.getElementById('add-link-form').reset();
+            loadExternalLinks();
+        } else {
+            alert('Error adding link.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error adding link.');
+    }
+}
+
+async function loadExternalLinks() {
+    try {
+        const response = await fetch('/api/external-links');
+        const links = await response.json();
+
+        const linksList = document.getElementById('admin-links-list');
+
+        if (links.length === 0) {
+            linksList.innerHTML = '<p class="no-data">No external links added yet.</p>';
+            return;
+        }
+
+        let html = '';
+        links.forEach((link) => {
+            const date = new Date(link.created_at).toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+            });
+
+            const typeIcons = {
+                youtube: '▶️',
+                facebook: '👍',
+                article: '📄',
+                other: '🔗',
+            };
+
+            html += `
+        <div class="gallery-item-admin">
+            <div class="media-info-admin">
+                <h4>${link.title}</h4>
+                ${link.description ? `<p>${link.description}</p>` : ''}
+                <p style="font-size: 0.9rem; color: #667eea; word-break: break-all; margin-top: 0.5rem;">
+                    <a href="${link.url}" target="_blank" rel="noopener">${link.url}</a>
+                </p>
+                <p class="media-meta">
+                    ${typeIcons[link.type]} ${
+                link.type.charAt(0).toUpperCase() + link.type.slice(1)
+            } • Added ${date}
+                </p>
+                <button class="delete-btn" onclick="deleteExternalLink(${link.id}, '${
+                link.title
+            }')">
+                    Delete
+                </button>
+            </div>
+        </div>
+    `;
+        });
+
+        linksList.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading links:', error);
+    }
+}
+
+async function deleteExternalLink(linkId, linkTitle) {
+    if (!confirm(`Are you sure you want to delete "${linkTitle}"?`)) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/admin/external-links/${linkId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ password: adminPassword }),
+        });
+
+        if (response.ok) {
+            alert('Link deleted successfully.');
+            loadExternalLinks();
+        } else {
+            alert('Error deleting link.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error deleting link.');
     }
 }

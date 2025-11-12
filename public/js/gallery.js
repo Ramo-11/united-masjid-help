@@ -3,17 +3,116 @@ let carouselStates = {};
 
 async function loadMediaGallery() {
     try {
-        const response = await fetch('/api/media');
-        const mediaGroups = await response.json();
+        const [mediaResponse, linksResponse] = await Promise.all([
+            fetch('/api/media'),
+            fetch('/api/external-links'),
+        ]);
+
+        const mediaGroups = await mediaResponse.json();
+        const externalLinks = await linksResponse.json();
 
         const gallery = document.getElementById('media-gallery');
 
-        if (mediaGroups.length === 0) {
+        if (mediaGroups.length === 0 && externalLinks.length === 0) {
             gallery.innerHTML = '<div class="no-media"><p>No media available yet.</p></div>';
             return;
         }
 
         let html = '';
+
+        // Add external links first
+        externalLinks.forEach((link) => {
+            const typeColors = {
+                youtube: '#ff0000',
+                facebook: '#1877f2',
+                article: '#667eea',
+                other: '#218838',
+            };
+
+            if (link.type === 'youtube' && link.embedUrl) {
+                html += `
+                    <div class="media-item" onclick="openYouTubeModal('${link.embedUrl}', '${
+                    link.title
+                }', '${link.description || ''}')">
+                        <div class="external-link-preview">
+                            <img src="${link.thumbnail}" alt="${link.title}" />
+                            <div class="external-link-overlay">
+                                <div class="external-link-play-icon">▶</div>
+                            </div>
+                        </div>
+                        <span class="media-type-badge" style="background: ${
+                            typeColors[link.type]
+                        };">YouTube</span>
+                        ${
+                            link.title || link.description
+                                ? `
+                            <div class="media-info">
+                                ${link.title ? `<h3>${link.title}</h3>` : ''}
+                                ${link.description ? `<p>${link.description}</p>` : ''}
+                            </div>
+                        `
+                                : ''
+                        }
+                    </div>
+                `;
+            } else if (link.type === 'facebook' && link.embedUrl) {
+                html += `
+                    <div class="media-item" onclick="openFacebookModal('${link.embedUrl}', '${
+                    link.title
+                }', '${link.description || ''}')">
+                        <div class="external-link-preview">
+                            <div class="external-link-container" style="background: linear-gradient(135deg, #1877f2 0%, #0d5dbd 100%);">
+                                <div class="external-link-icon">👍</div>
+                                <div class="external-link-label">FACEBOOK</div>
+                            </div>
+                        </div>
+                        <span class="media-type-badge" style="background: ${
+                            typeColors[link.type]
+                        };">Facebook</span>
+                        ${
+                            link.title || link.description
+                                ? `
+                            <div class="media-info">
+                                ${link.title ? `<h3>${link.title}</h3>` : ''}
+                                ${link.description ? `<p>${link.description}</p>` : ''}
+                            </div>
+                        `
+                                : ''
+                        }
+                    </div>
+                `;
+            } else {
+                html += `
+                    <a href="${
+                        link.url
+                    }" target="_blank" rel="noopener" class="media-item external-link-item" style="text-decoration: none;">
+                        <div class="external-link-preview">
+                            <div class="external-link-container">
+                                <div class="external-link-icon">${
+                                    link.type === 'article' ? '📄' : '🔗'
+                                }</div>
+                                <div class="external-link-label">${link.type.toUpperCase()}</div>
+                            </div>
+                        </div>
+                        <span class="media-type-badge" style="background: ${
+                            typeColors[link.type]
+                        };">${link.type}</span>
+                        ${
+                            link.title || link.description
+                                ? `
+                            <div class="media-info">
+                                ${link.title ? `<h3>${link.title}</h3>` : ''}
+                                ${link.description ? `<p>${link.description}</p>` : ''}
+                            </div>
+                        `
+                                : ''
+                        }
+                    </a>
+                `;
+            }
+        });
+
+        // Add media groups
         mediaGroups.forEach((group) => {
             const hasMultiple = group.items.length > 1;
 
@@ -216,6 +315,52 @@ function lightboxPrevSlide() {
         (currentLightboxIndex - 1 + currentLightboxGroup.items.length) %
         currentLightboxGroup.items.length;
     showLightboxSlide(prevIndex);
+}
+
+function openYouTubeModal(embedUrl, title, description) {
+    const content = document.getElementById('lightbox-media-content');
+
+    content.innerHTML = `
+        <div class="youtube-embed-container">
+            <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        ${
+            title || description
+                ? `
+            <div class="lightbox-info">
+                ${title ? `<h3>${title}</h3>` : ''}
+                ${description ? `<p>${description}</p>` : ''}
+            </div>
+        `
+                : ''
+        }
+    `;
+
+    const modal = document.getElementById('lightbox-modal');
+    modal.classList.add('active');
+}
+
+function openFacebookModal(embedUrl, title, description) {
+    const content = document.getElementById('lightbox-media-content');
+
+    content.innerHTML = `
+        <div class="facebook-embed-container">
+            <iframe src="${embedUrl}" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+        </div>
+        ${
+            title || description
+                ? `
+            <div class="lightbox-info">
+                ${title ? `<h3>${title}</h3>` : ''}
+                ${description ? `<p>${description}</p>` : ''}
+            </div>
+        `
+                : ''
+        }
+    `;
+
+    const modal = document.getElementById('lightbox-modal');
+    modal.classList.add('active');
 }
 
 function closeLightbox() {
