@@ -14,6 +14,8 @@ const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pant
 
 const db = new Database(dbPath);
 
+db.exec(`DROP TABLE IF EXISTS media_gallery;`);
+
 // Initialize database tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS pantry_goals (
@@ -68,6 +70,7 @@ db.exec(`
   type TEXT NOT NULL,
   title TEXT,
   description TEXT,
+  group_id TEXT NOT NULL,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 `);
@@ -343,60 +346,85 @@ app.post('/api/admin/logout', (req, res) => {
 // Get all media
 app.get('/api/media', (req, res) => {
     const media = db.prepare('SELECT * FROM media_gallery ORDER BY created_at DESC').all();
-    res.json(media);
+
+    // Group media by group_id
+    const grouped = {};
+    media.forEach((item) => {
+        if (!grouped[item.group_id]) {
+            grouped[item.group_id] = {
+                group_id: item.group_id,
+                title: item.title,
+                description: item.description,
+                created_at: item.created_at,
+                items: [],
+            };
+        }
+        grouped[item.group_id].items.push({
+            id: item.id,
+            url: item.url,
+            thumbnail_url: item.thumbnail_url,
+            type: item.type,
+        });
+    });
+
+    res.json(Object.values(grouped));
 });
 
 // Upload media (admin)
-app.post('/api/admin/media', upload.single('file'), async (req, res) => {
+app.post('/api/admin/media', upload.array('files', 20), async (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file provided' });
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).json({ error: 'No files provided' });
     }
 
     try {
-        // Upload to Cloudinary
-        const result = await new Promise((resolve, reject) => {
-            const uploadStream = cloudinary.uploader.upload_stream(
-                {
-                    resource_type: 'auto',
-                    folder: 'food-pantry',
-                    transformation: req.file.mimetype.startsWith('video/')
-                        ? [{ quality: 'auto' }]
-                        : [{ quality: 'auto', fetch_format: 'auto' }],
-                },
-                (error, result) => {
-                    if (error) reject(error);
-                    else resolve(result);
-                }
+        const groupId = Date.now().toString();
+        const uploadedMedia = [];
+
+        for (const file of req.files) {
+            const result = await new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        resource_type: 'auto',
+                        folder: 'food-pantry',
+                        transformation: file.mimetype.startsWith('video/')
+                            ? [{ quality: 'auto' }]
+                            : [{ quality: 'auto', fetch_format: 'auto' }],
+                    },
+                    (error, result) => {
+                        if (error) reject(error);
+                        else resolve(result);
+                    }
+                );
+                uploadStream.end(file.buffer);
+            });
+
+            const mediaType = result.resource_type === 'video' ? 'video' : 'image';
+            const thumbnailUrl =
+                mediaType === 'video' ? result.url.replace(/\.[^.]+$/, '.jpg') : null;
+
+            const stmt = db.prepare(`
+                INSERT INTO media_gallery (cloudinary_id, url, thumbnail_url, type, title, description, group_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            `);
+
+            stmt.run(
+                result.public_id,
+                result.secure_url,
+                thumbnailUrl,
+                mediaType,
+                req.body.title || '',
+                req.body.description || '',
+                groupId
             );
-            uploadStream.end(req.file.buffer);
-        });
 
-        // Determine media type
-        const mediaType = result.resource_type === 'video' ? 'video' : 'image';
+            uploadedMedia.push({ url: result.secure_url, type: mediaType });
+        }
 
-        // Get thumbnail URL for videos
-        const thumbnailUrl = mediaType === 'video' ? result.url.replace(/\.[^.]+$/, '.jpg') : null;
-
-        // Save to database
-        const stmt = db.prepare(`
-            INSERT INTO media_gallery (cloudinary_id, url, thumbnail_url, type, title, description)
-            VALUES (?, ?, ?, ?, ?, ?)
-        `);
-
-        stmt.run(
-            result.public_id,
-            result.secure_url,
-            thumbnailUrl,
-            mediaType,
-            req.body.title || '',
-            req.body.description || ''
-        );
-
-        res.json({ success: true, media: { url: result.secure_url, type: mediaType } });
+        res.json({ success: true, media: uploadedMedia });
     } catch (error) {
         console.error('Upload error:', error);
         res.status(500).json({ error: 'Upload failed' });
@@ -404,28 +432,29 @@ app.post('/api/admin/media', upload.single('file'), async (req, res) => {
 });
 
 // Delete media (admin)
-app.delete('/api/admin/media/:id', async (req, res) => {
+app.delete('/api/admin/media/group/:groupId', async (req, res) => {
     if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { id } = req.params;
+    const { groupId } = req.params;
 
     try {
-        // Get media info
-        const media = db.prepare('SELECT * FROM media_gallery WHERE id = ?').get(id);
+        const mediaItems = db
+            .prepare('SELECT * FROM media_gallery WHERE group_id = ?')
+            .all(groupId);
 
-        if (!media) {
+        if (mediaItems.length === 0) {
             return res.status(404).json({ error: 'Media not found' });
         }
 
-        // Delete from Cloudinary
-        await cloudinary.uploader.destroy(media.cloudinary_id, {
-            resource_type: media.type === 'video' ? 'video' : 'image',
-        });
+        for (const media of mediaItems) {
+            await cloudinary.uploader.destroy(media.cloudinary_id, {
+                resource_type: media.type === 'video' ? 'video' : 'image',
+            });
+        }
 
-        // Delete from database
-        db.prepare('DELETE FROM media_gallery WHERE id = ?').run(id);
+        db.prepare('DELETE FROM media_gallery WHERE group_id = ?').run(groupId);
 
         res.json({ success: true });
     } catch (error) {

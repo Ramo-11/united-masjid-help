@@ -1,5 +1,5 @@
 // Admin Gallery Management
-let selectedFile = null;
+let selectedFiles = [];
 
 document.addEventListener('DOMContentLoaded', function () {
     setupFileUpload();
@@ -10,7 +10,6 @@ function setupFileUpload() {
     const uploadArea = document.getElementById('file-upload-area');
     const fileInput = document.getElementById('media-file');
     const previewArea = document.getElementById('preview-area');
-    const previewContainer = document.getElementById('preview-container');
 
     // Click to upload
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -29,22 +28,21 @@ function setupFileUpload() {
         e.preventDefault();
         uploadArea.classList.remove('dragover');
 
-        const files = e.dataTransfer.files;
+        const files = Array.from(e.dataTransfer.files);
         if (files.length > 0) {
-            handleFileSelect(files[0]);
+            handleFileSelect(files);
         }
     });
 
     // File input change
     fileInput.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
-            handleFileSelect(e.target.files[0]);
+            handleFileSelect(Array.from(e.target.files));
         }
     });
 }
 
-function handleFileSelect(file) {
-    // Validate file type
+function handleFileSelect(files) {
     const validTypes = [
         'image/jpeg',
         'image/png',
@@ -53,54 +51,84 @@ function handleFileSelect(file) {
         'video/mp4',
         'video/quicktime',
     ];
-    if (!validTypes.includes(file.type)) {
-        alert('Please select a valid image (JPEG, PNG, GIF, WEBP) or video (MP4, MOV) file.');
-        return;
-    }
 
-    // Validate file size (50MB max)
     const maxSize = 50 * 1024 * 1024;
-    if (file.size > maxSize) {
-        alert('File size must be less than 50MB.');
-        return;
+
+    for (let file of files) {
+        if (!validTypes.includes(file.type)) {
+            alert(
+                `${file.name}: Please select a valid image (JPEG, PNG, GIF, WEBP) or video (MP4, MOV) file.`
+            );
+            continue;
+        }
+
+        if (file.size > maxSize) {
+            alert(`${file.name}: File size must be less than 50MB.`);
+            continue;
+        }
+
+        selectedFiles.push(file);
     }
 
-    selectedFile = file;
+    if (selectedFiles.length === 0) return;
 
     // Show preview
     const previewArea = document.getElementById('preview-area');
     const previewContainer = document.getElementById('preview-container');
 
     previewArea.classList.add('active');
+    previewContainer.innerHTML = '';
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        if (file.type.startsWith('video/')) {
-            previewContainer.innerHTML = `
-                <video src="${e.target.result}" controls style="width: 100%;"></video>
-                <button class="remove-preview" onclick="removePreview()">×</button>
-            `;
-        } else {
-            previewContainer.innerHTML = `
-                <img src="${e.target.result}" alt="Preview" style="width: 100%;">
-                <button class="remove-preview" onclick="removePreview()">×</button>
-            `;
-        }
-    };
-    reader.readAsDataURL(file);
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+
+            if (file.type.startsWith('video/')) {
+                previewItem.innerHTML = `
+                    <video src="${e.target.result}" controls></video>
+                    <button class="remove-preview-item" onclick="removeIndividualPreview(${index})">×</button>
+                `;
+            } else {
+                previewItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Preview">
+                    <button class="remove-preview-item" onclick="removeIndividualPreview(${index})">×</button>
+                `;
+            }
+
+            previewContainer.appendChild(previewItem);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+function removeIndividualPreview(index) {
+    selectedFiles.splice(index, 1);
+
+    if (selectedFiles.length === 0) {
+        removePreview();
+    } else {
+        handleFileSelect([]);
+        const fileInput = document.getElementById('media-file');
+        const dt = new DataTransfer();
+        selectedFiles.forEach((file) => dt.items.add(file));
+        fileInput.files = dt.files;
+    }
 }
 
 function removePreview() {
-    selectedFile = null;
+    selectedFiles = [];
     document.getElementById('preview-area').classList.remove('active');
     document.getElementById('media-file').value = '';
+    document.getElementById('preview-container').innerHTML = '';
 }
 
 async function uploadMedia(e) {
     e.preventDefault();
 
-    if (!selectedFile) {
-        alert('Please select a file to upload.');
+    if (selectedFiles.length === 0) {
+        alert('Please select at least one file to upload.');
         return;
     }
 
@@ -108,7 +136,9 @@ async function uploadMedia(e) {
     const description = document.getElementById('media-description').value.trim();
 
     const formData = new FormData();
-    formData.append('file', selectedFile);
+    selectedFiles.forEach((file) => {
+        formData.append('files', file);
+    });
     formData.append('title', title);
     formData.append('description', description);
     formData.append('password', adminPassword);
@@ -121,7 +151,6 @@ async function uploadMedia(e) {
     uploadBtn.disabled = true;
     uploadBtn.textContent = 'Uploading...';
 
-    // Simulate progress (since we can't track actual upload progress with fetch)
     let progress = 0;
     const progressInterval = setInterval(() => {
         progress += 5;
@@ -170,18 +199,18 @@ async function uploadMedia(e) {
 async function loadAdminGallery() {
     try {
         const response = await fetch('/api/media');
-        const media = await response.json();
+        const mediaGroups = await response.json();
 
         const galleryList = document.getElementById('admin-gallery-list');
 
-        if (media.length === 0) {
+        if (mediaGroups.length === 0) {
             galleryList.innerHTML = '<p class="no-data">No media uploaded yet.</p>';
             return;
         }
 
         let html = '';
-        media.forEach((item) => {
-            const date = new Date(item.created_at).toLocaleDateString('en-US', {
+        mediaGroups.forEach((group) => {
+            const date = new Date(group.created_at).toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
@@ -189,25 +218,33 @@ async function loadAdminGallery() {
                 minute: '2-digit',
             });
 
+            const firstItem = group.items[0];
+            const mediaCount = group.items.length;
+
             html += `
         <div class="gallery-item-admin">
             <div class="media-container">
                 ${
-                    item.type === 'video'
-                        ? `<video src="${item.url}" controls></video>`
-                        : `<img src="${item.url}" alt="${item.title || 'Gallery image'}" />`
+                    firstItem.type === 'video'
+                        ? `<video src="${firstItem.url}" controls></video>`
+                        : `<img src="${firstItem.url}" alt="${group.title || 'Gallery image'}" />`
                 }
+                ${mediaCount > 1 ? `<div class="media-count-badge">${mediaCount} items</div>` : ''}
             </div>
-            ${item.title ? `<h4>${item.title}</h4>` : '<h4>Untitled</h4>'}
-            ${item.description ? `<p>${item.description}</p>` : ''}
-            <p style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">
-                ${item.type === 'video' ? '▶ Video' : '📷 Photo'} • Uploaded ${date}
-            </p>
-            <button class="delete-btn" onclick="deleteMedia(${item.id}, '${
-                item.title || 'this media'
+            <div class="media-info-admin">
+                ${group.title ? `<h4>${group.title}</h4>` : '<h4>Untitled</h4>'}
+                ${group.description ? `<p>${group.description}</p>` : ''}
+                <p class="media-meta">
+                    ${firstItem.type === 'video' ? '▶ Video' : '📷 Photo'}${
+                mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
+            } • Uploaded ${date}
+                </p>
+                <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
+                group.title || 'this media group'
             }')">
-                Delete
-            </button>
+                    Delete ${mediaCount > 1 ? 'Group' : ''}
+                </button>
+            </div>
         </div>
     `;
         });
@@ -218,13 +255,13 @@ async function loadAdminGallery() {
     }
 }
 
-async function deleteMedia(mediaId, mediaTitle) {
+async function deleteMediaGroup(groupId, mediaTitle) {
     if (!confirm(`Are you sure you want to delete "${mediaTitle}"? This cannot be undone!`)) {
         return;
     }
 
     try {
-        const response = await fetch(`/api/admin/media/${mediaId}`, {
+        const response = await fetch(`/api/admin/media/group/${groupId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -248,11 +248,16 @@
                     <h3>Upload New Media</h3>
                     <form id="upload-media-form" onsubmit="uploadMedia(event)">
                         <div class="file-upload-area" id="file-upload-area">
-                            <input type="file" id="media-file" accept="image/*,video/*" />
+                            <input type="file" id="media-file" accept="image/*,video/*" multiple />
                             <div class="upload-icon">📤</div>
                             <p><strong>Click to upload or drag and drop</strong></p>
-                            <p>Images (JPEG, PNG, GIF, WEBP) or Videos (MP4, MOV)</p>
-                            <p style="font-size: 0.85rem; color: #999">Max file size: 50MB</p>
+                            <p>
+                                Select one or multiple files - Images (JPEG, PNG, GIF, WEBP) or
+                                Videos (MP4, MOV)
+                            </p>
+                            <p style="font-size: 0.85rem; color: #999">
+                                Max file size: 50MB per file
+                            </p>
                         </div>
 
                         <div class="preview-area" id="preview-area">
