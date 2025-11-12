@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Food Pantry Donation Tracker</title>
         <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="css/gallery.css" />
     </head>
     <body>
         <header>
@@ -108,6 +109,21 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Media Gallery Section -->
+            <section class="gallery-section">
+                <h2>Our Community in Action</h2>
+                <p>See the impact of our food pantry work through photos and videos</p>
+                <div class="media-gallery" id="media-gallery">
+                    <p class="no-data">Loading gallery...</p>
+                </div>
+            </section>
+
+            <!-- Lightbox Modal -->
+            <div class="lightbox-modal" id="lightbox-modal">
+                <button class="lightbox-close" onclick="closeLightbox()">×</button>
+                <div class="lightbox-content" id="lightbox-media-content"></div>
+            </div>
         </main>
 
         <footer>
@@ -126,6 +142,7 @@
             </div>
         </footer>
 
+        <script src="js/gallery.js"></script>
         <script src="js/index.js"></script>
     </body>
 </html>

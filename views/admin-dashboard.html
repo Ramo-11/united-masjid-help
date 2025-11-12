@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard</title>
         <link rel="stylesheet" href="css/styles.css" />
+        <link rel="stylesheet" href="css/gallery.css" />
     </head>
     <body>
         <header>
@@ -23,6 +24,7 @@
                 <button class="tab-btn" onclick="switchTab('volunteers')">Volunteer Slots</button>
                 <button class="tab-btn" onclick="switchTab('signups')">Volunteer Sign-ups</button>
                 <button class="tab-btn" onclick="switchTab('donations')">Donation History</button>
+                <button class="tab-btn" onclick="switchTab('gallery')">Media Gallery</button>
             </div>
 
             <!-- Pantry Goals Tab -->
@@ -237,6 +239,59 @@
                     <div id="donations-list"></div>
                 </div>
             </div>
+
+            <!-- Media Gallery Tab -->
+            <div id="gallery-tab" class="tab-content">
+                <h2>Manage Media Gallery</h2>
+
+                <div class="upload-section">
+                    <h3>Upload New Media</h3>
+                    <form id="upload-media-form" onsubmit="uploadMedia(event)">
+                        <div class="file-upload-area" id="file-upload-area">
+                            <input type="file" id="media-file" accept="image/*,video/*" />
+                            <div class="upload-icon">📤</div>
+                            <p><strong>Click to upload or drag and drop</strong></p>
+                            <p>Images (JPEG, PNG, GIF, WEBP) or Videos (MP4, MOV)</p>
+                            <p style="font-size: 0.85rem; color: #999">Max file size: 50MB</p>
+                        </div>
+
+                        <div class="preview-area" id="preview-area">
+                            <div class="preview-container" id="preview-container"></div>
+                        </div>
+
+                        <div class="upload-progress" id="upload-progress">
+                            <div class="progress-bar-upload">
+                                <div class="progress-fill-upload" id="progress-fill-upload">0%</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="media-title">Title (Optional)</label>
+                            <input
+                                type="text"
+                                id="media-title"
+                                placeholder="e.g., Food Distribution Day"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="media-description">Description (Optional)</label>
+                            <input
+                                type="text"
+                                id="media-description"
+                                placeholder="e.g., Volunteers distributing food to families in need"
+                            />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Upload Media</button>
+                    </form>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Uploaded Media</h3>
+                    <div id="admin-gallery-list"></div>
+                </div>
+            </div>
         </main>
 
         <footer>
@@ -256,5 +311,6 @@
         </footer>
 
         <script src="js/admin-dashboard.js"></script>
+        <script src="js/admin-gallery.js"></script>
     </body>
 </html>

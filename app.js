@@ -3,6 +3,8 @@ const path = require('path');
 const Database = require('better-sqlite3');
 const session = require('express-session');
 const SqliteStore = require('better-sqlite3-session-store')(session);
+const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
 const app = express();
@@ -57,7 +59,26 @@ db.exec(`
     total REAL NOT NULL DEFAULT 0,
     UNIQUE(pantry, week_start)
   );
+
+  CREATE TABLE IF NOT EXISTS media_gallery (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  cloudinary_id TEXT NOT NULL,
+  url TEXT NOT NULL,
+  thumbnail_url TEXT,
+  type TEXT NOT NULL,
+  title TEXT,
+  description TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 `);
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 // Initialize default pantry goals
 const initGoals = db.prepare(`
@@ -317,6 +338,100 @@ app.get('/api/admin/check', (req, res) => {
 app.post('/api/admin/logout', (req, res) => {
     req.session.adminAuthenticated = false;
     res.json({ success: true });
+});
+
+// Get all media
+app.get('/api/media', (req, res) => {
+    const media = db.prepare('SELECT * FROM media_gallery ORDER BY created_at DESC').all();
+    res.json(media);
+});
+
+// Upload media (admin)
+app.post('/api/admin/media', upload.single('file'), async (req, res) => {
+    if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file provided' });
+    }
+
+    try {
+        // Upload to Cloudinary
+        const result = await new Promise((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    resource_type: 'auto',
+                    folder: 'food-pantry',
+                    transformation: req.file.mimetype.startsWith('video/')
+                        ? [{ quality: 'auto' }]
+                        : [{ quality: 'auto', fetch_format: 'auto' }],
+                },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result);
+                }
+            );
+            uploadStream.end(req.file.buffer);
+        });
+
+        // Determine media type
+        const mediaType = result.resource_type === 'video' ? 'video' : 'image';
+
+        // Get thumbnail URL for videos
+        const thumbnailUrl = mediaType === 'video' ? result.url.replace(/\.[^.]+$/, '.jpg') : null;
+
+        // Save to database
+        const stmt = db.prepare(`
+            INSERT INTO media_gallery (cloudinary_id, url, thumbnail_url, type, title, description)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `);
+
+        stmt.run(
+            result.public_id,
+            result.secure_url,
+            thumbnailUrl,
+            mediaType,
+            req.body.title || '',
+            req.body.description || ''
+        );
+
+        res.json({ success: true, media: { url: result.secure_url, type: mediaType } });
+    } catch (error) {
+        console.error('Upload error:', error);
+        res.status(500).json({ error: 'Upload failed' });
+    }
+});
+
+// Delete media (admin)
+app.delete('/api/admin/media/:id', async (req, res) => {
+    if (!req.body.password || req.body.password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+
+    try {
+        // Get media info
+        const media = db.prepare('SELECT * FROM media_gallery WHERE id = ?').get(id);
+
+        if (!media) {
+            return res.status(404).json({ error: 'Media not found' });
+        }
+
+        // Delete from Cloudinary
+        await cloudinary.uploader.destroy(media.cloudinary_id, {
+            resource_type: media.type === 'video' ? 'video' : 'image',
+        });
+
+        // Delete from database
+        db.prepare('DELETE FROM media_gallery WHERE id = ?').run(id);
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Delete error:', error);
+        res.status(500).json({ error: 'Delete failed' });
+    }
 });
 
 // Serve static HTML files

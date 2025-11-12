@@ -1,0 +1,463 @@
+/* Media Gallery Styles */
+.gallery-section {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.gallery-section h2 {
+    text-align: center;
+    color: #218838;
+    margin-bottom: 0.5rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.gallery-section > p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.media-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.media-item {
+    position: relative;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    cursor: pointer;
+}
+
+.media-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2);
+}
+
+.media-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.media-container img,
+.media-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.media-item:hover .media-container img,
+.media-item:hover .media-container video {
+    transform: scale(1.08);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: rgba(33, 136, 56, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.media-item:hover .play-overlay {
+    background: rgba(33, 136, 56, 1);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.play-overlay::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 20px solid white;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
+}
+
+.media-info {
+    padding: 1.5rem;
+}
+
+.media-info h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.media-info p {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.media-type-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(33, 136, 56, 0.95);
+    color: white;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+}
+
+.no-media {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.no-media p {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* Lightbox Modal */
+.lightbox-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.lightbox-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90vh;
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.lightbox-content img,
+.lightbox-content video {
+    max-width: 100%;
+    max-height: 85vh;
+    border-radius: 10px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-info {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 0 0 10px 10px;
+    margin-top: -5px;
+}
+
+.lightbox-info h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.lightbox-info p {
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: white;
+    color: #333;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.lightbox-close:hover {
+    background: #218838;
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Admin Upload Section */
+.upload-section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.upload-section h3 {
+    color: #218838;
+    margin-bottom: 1.5rem;
+}
+
+.file-upload-area {
+    border: 3px dashed #218838;
+    border-radius: 10px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+}
+
+.file-upload-area:hover {
+    background: #e8f5e9;
+    border-color: #1a6d2e;
+}
+
+.file-upload-area.dragover {
+    background: #c8e6c9;
+    border-color: #1a6d2e;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: #218838;
+    margin-bottom: 1rem;
+}
+
+.file-upload-area p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+.file-upload-area input[type='file'] {
+    display: none;
+}
+
+.preview-area {
+    display: none;
+    margin-top: 1.5rem;
+}
+
+.preview-area.active {
+    display: block;
+}
+
+.preview-container {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto 1rem;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.preview-container img,
+.preview-container video {
+    width: 100%;
+    display: block;
+}
+
+.remove-preview {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-progress {
+    display: none;
+    margin: 1rem 0;
+}
+
+.upload-progress.active {
+    display: block;
+}
+
+.progress-bar-upload {
+    height: 25px;
+    background: #e0e0e0;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progress-fill-upload {
+    height: 100%;
+    background: linear-gradient(90deg, #218838 0%, #28a745 100%);
+    width: 0%;
+    transition: width 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+/* Gallery Grid Items */
+.gallery-item-admin {
+    position: relative;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+}
+
+.gallery-item-admin .media-container {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 150px;
+}
+
+.gallery-item-admin img,
+.gallery-item-admin video {
+    max-width: 100%;
+    max-height: 200px;
+    height: auto;
+    width: auto;
+    object-fit: contain;
+    border-radius: 5px;
+    display: block;
+}
+
+.gallery-item-admin h4 {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.gallery-item-admin p {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.gallery-item-admin .delete-btn {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .gallery-section h2 {
+        font-size: 2rem;
+    }
+
+    .media-gallery {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+
+    .lightbox-content {
+        max-width: 95%;
+    }
+
+    .lightbox-close {
+        top: -45px;
+        width: 40px;
+        height: 40px;
+        font-size: 1.5rem;
+    }
+
+    .play-overlay {
+        width: 60px;
+        height: 60px;
+    }
+
+    .play-overlay::after {
+        border-left-width: 16px;
+        border-top-width: 10px;
+        border-bottom-width: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .media-info h3 {
+        font-size: 1.1rem;
+    }
+
+    .media-info p {
+        font-size: 0.9rem;
+    }
+}
