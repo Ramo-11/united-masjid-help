@@ -14,8 +14,6 @@ const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pant
 
 const db = new Database(dbPath);
 
-db.exec(`DROP TABLE IF EXISTS media_gallery;`);
-
 // Initialize database tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS pantry_goals (
