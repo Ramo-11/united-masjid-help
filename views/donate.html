@@ -3,17 +3,63 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Record Donation</title>
+        <title>Record Donation - United Masjid Help</title>
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="css/base.css" />
+        <link rel="stylesheet" href="css/layout.css" />
         <link rel="stylesheet" href="css/styles.css" />
     </head>
     <body>
-        <header>
-            <h1>United Masjid Help</h1>
-            <nav>
-                <a href="/">Home</a>
-                <a href="volunteer.html">Volunteer Sign-Up</a>
-            </nav>
-        </header>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">
+                    <div class="navbar-logo">UMH</div>
+                    <span class="navbar-title">United Masjid Help</span>
+                </a>
+
+                <ul class="navbar-nav" id="navbarNav">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link">
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/volunteer.html" class="nav-link">
+                            <span>Volunteer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/media.html" class="nav-link">
+                            <span>Gallery</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-actions">
+                    <a href="/#donate" class="navbar-cta">Donate Now</a>
+                </div>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero" style="padding: 2rem 0">
+            <div class="hero-content">
+                <h1 style="font-size: 2rem">Record Your Donation</h1>
+                <p style="font-size: 1.1rem">
+                    Thank you for supporting our community food pantries
+                </p>
+            </div>
+        </section>
 
         <main class="container">
             <div class="form-container">
@@ -43,6 +89,7 @@
                                 min="0"
                                 step="0.01"
                                 placeholder="0.00"
+                                class="form-control"
                             />
                         </div>
                     </div>
@@ -291,22 +338,50 @@
             </div>
         </main>
 
-        <footer>
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-wave"></div>
             <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Supporting Our Community</h4>
-                    <p>Al-Mumineen • Al-Fajr • Al-Huda Food Pantries</p>
-                    <p>Serving families in need with dignity and compassion</p>
-                </div>
-                <div class="footer-section">
-                    <p>
-                        Made by
-                        <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a>
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="footer-logo-text">United Masjid Help</span>
+                    </div>
+                    <p class="footer-description">
+                        Supporting our community through Al-Mumineen, Al-Fajr, and Al-Huda food
+                        pantries. Together, we serve families in need with dignity and compassion.
                     </p>
                 </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/volunteer.html">Volunteer</a></li>
+                        <li><a href="/media.html">Gallery</a></li>
+                        <li><a href="/#donate">Donate</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Our Pantries</h4>
+                    <ul class="footer-links">
+                        <li><a href="/#almumineen">Al-Mumineen</a></li>
+                        <li><a href="/#alfajr">Al-Fajr</a></li>
+                        <li><a href="/#alhuda">Al-Huda</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    &copy; 2025 United Masjid Help. All rights reserved. | Made by
+                    <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a>
+                </p>
             </div>
         </footer>
 
+        <!-- JavaScript -->
+        <script src="js/navigation.js"></script>
         <script src="js/donate.js"></script>
     </body>
 </html>

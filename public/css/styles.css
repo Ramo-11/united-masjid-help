@@ -25,25 +25,6 @@ header h1 {
     font-size: 2rem;
 }
 
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-}
-
-nav a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-nav a:hover,
-nav a.active {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
 .container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -78,23 +59,6 @@ nav a.active {
 .pantry-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.pantry-card.priority {
-    border: 3px solid #218838;
-    position: relative;
-}
-
-.pantry-card.priority::before {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #218838;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: bold;
 }
 
 .pantry-card h3 {
@@ -184,6 +148,7 @@ nav a.active {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     margin: 0 auto 2rem;
+    margin-top: 100px;
 }
 
 .form-container h2 {
@@ -370,43 +335,6 @@ nav a.active {
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: bold;
-}
-
-footer {
-    text-align: center;
-    padding: 2rem;
-    background: #333;
-    color: white;
-    margin-top: 3rem;
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.footer-section {
-    margin-bottom: 1rem;
-}
-
-.footer-section h4 {
-    color: #218838;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-}
-
-.footer-section p {
-    margin: 0.25rem 0;
-    font-size: 0.95rem;
-}
-
-footer a {
-    color: #218838;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
 }
 
 @media (max-width: 768px) {

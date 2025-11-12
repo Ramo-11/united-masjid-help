@@ -3,146 +3,324 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>United Masjid Help</title>
-        <link rel="stylesheet" href="css/styles.css" />
-        <link rel="stylesheet" href="css/gallery.css" />
+        <title>United Masjid Help - Supporting Our Community</title>
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="css/base.css" />
+        <link rel="stylesheet" href="css/layout.css" />
+        <link rel="stylesheet" href="css/home.css" />
     </head>
     <body>
-        <header>
-            <h1>United Masjid Help</h1>
-            <nav>
-                <a href="/" class="active">Home</a>
-                <a href="volunteer.html">Volunteer Sign-Up</a>
-            </nav>
-        </header>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">
+                    <div class="navbar-logo">UMH</div>
+                    <span class="navbar-title">United Masjid Help</span>
+                </a>
 
-        <main class="container">
-            <div class="intro">
-                <h2>Support Our Community Food Pantries</h2>
-                <p>Track donations and help us reach our weekly goal of $500 per pantry!</p>
+                <ul class="navbar-nav" id="navbarNav">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/volunteer.html" class="nav-link">
+                            <span>Volunteer</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/media.html" class="nav-link">
+                            <span>Gallery</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="navbar-actions">
+                    <a href="#donate" class="navbar-cta">Donate Now</a>
+                </div>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
             </div>
+        </nav>
 
-            <div class="pantries-grid">
-                <div class="pantry-card priority" data-pantry="almumineen">
-                    <h3>Al-Mumineen Food Pantry</h3>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Supporting Our Community Together</h1>
+                <p>
+                    Join us in making a difference through our food pantry initiatives. Every
+                    contribution helps families in need.
+                </p>
+                <div class="btn-group" style="justify-content: center">
+                    <a href="#donate" class="btn btn-primary">Donate Now</a>
+                    <a
+                        href="/volunteer.html"
+                        class="btn"
+                        style="
+                            background: rgba(255, 255, 255, 0.2);
+                            color: white;
+                            border: 2px solid white;
+                        "
+                        >Become a Volunteer</a
+                    >
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="container">
+            <!-- Introduction -->
+            <section class="intro-section">
+                <h2 class="intro-title">Support Our Community Food Pantries</h2>
+                <p class="intro-description">
+                    Track donations and help us reach our weekly goals. Together, we're building a
+                    stronger, more caring community through Al-Mumineen, Al-Fajr, and Al-Huda food
+                    pantries.
+                </p>
+            </section>
+
+            <!-- Pantries Grid -->
+            <section id="donate" class="pantries-grid">
+                <!-- Al-Mumineen -->
+                <div class="pantry-card" data-pantry="almumineen">
+                    <div class="pantry-header">
+                        <h3 class="pantry-title">Al-Mumineen Food Pantry</h3>
+                    </div>
+
                     <div class="progress-container">
+                        <div class="progress-stats">
+                            <span class="progress-current" id="amount-almumineen">$0</span>
+                            <span class="progress-goal"
+                                >Goal: $<span id="goal-almumineen">500</span></span
+                            >
+                        </div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-almumineen"></div>
                         </div>
-                        <div class="progress-text">
-                            <span id="amount-almumineen">$0</span> / $<span id="goal-almumineen"
-                                >500</span
-                            >
+                        <div class="progress-percentage" id="percentage-almumineen">
+                            0% Complete
                         </div>
                     </div>
+
                     <div class="donation-flow">
-                        <p class="flow-instruction">Step 1: Donate online</p>
-                        <a
-                            href="https://sites.google.com/view/lutspantry/make-a-donation"
-                            target="_blank"
-                            class="btn btn-primary"
-                            >Donate Online Now</a
-                        >
-                        <p class="flow-instruction">Step 2: Record your donation</p>
-                        <button
-                            onclick="location.href='donate.html?pantry=almumineen'"
-                            class="btn btn-secondary"
-                        >
-                            Record My Donation
-                        </button>
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 1: Donate Online</p>
+                                <a
+                                    href="https://sites.google.com/view/lutspantry/make-a-donation"
+                                    target="_blank"
+                                    class="btn btn-primary"
+                                    style="width: 100%"
+                                >
+                                    Donate Online Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 2: Record Your Donation</p>
+                                <button
+                                    onclick="location.href='donate.html?pantry=almumineen'"
+                                    class="btn btn-secondary"
+                                    style="width: 100%"
+                                >
+                                    Record My Donation
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Al-Fajr -->
                 <div class="pantry-card" data-pantry="alfajr">
-                    <h3>Al-Fajr Food Pantry</h3>
+                    <div class="pantry-header">
+                        <h3 class="pantry-title">Al-Fajr Food Pantry</h3>
+                    </div>
+
                     <div class="progress-container">
+                        <div class="progress-stats">
+                            <span class="progress-current" id="amount-alfajr">$0</span>
+                            <span class="progress-goal"
+                                >Goal: $<span id="goal-alfajr">500</span></span
+                            >
+                        </div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-alfajr"></div>
                         </div>
-                        <div class="progress-text">
-                            <span id="amount-alfajr">$0</span> / $<span id="goal-alfajr">500</span>
-                        </div>
+                        <div class="progress-percentage" id="percentage-alfajr">0% Complete</div>
                     </div>
+
                     <div class="donation-flow">
-                        <p class="flow-instruction">Step 1: Donate online</p>
-                        <a
-                            href="https://secure-api.net/give/v7/imca-food-pantry"
-                            target="_blank"
-                            class="btn btn-primary"
-                            >Donate Online Now</a
-                        >
-                        <p class="flow-instruction">Step 2: Record your donation</p>
-                        <button
-                            onclick="location.href='donate.html?pantry=alfajr'"
-                            class="btn btn-secondary"
-                        >
-                            Record My Donation
-                        </button>
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 1: Donate Online</p>
+                                <a
+                                    href="https://secure-api.net/give/v7/imca-food-pantry"
+                                    target="_blank"
+                                    class="btn btn-primary"
+                                    style="width: 100%"
+                                >
+                                    Donate Online Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 2: Record Your Donation</p>
+                                <button
+                                    onclick="location.href='donate.html?pantry=alfajr'"
+                                    class="btn btn-secondary"
+                                    style="width: 100%"
+                                >
+                                    Record My Donation
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- Al-Huda -->
                 <div class="pantry-card" data-pantry="alhuda">
-                    <h3>Al-Huda Food Pantry</h3>
+                    <div class="pantry-header">
+                        <h3 class="pantry-title">Al-Huda Food Pantry</h3>
+                    </div>
+
                     <div class="progress-container">
+                        <div class="progress-stats">
+                            <span class="progress-current" id="amount-alhuda">$0</span>
+                            <span class="progress-goal"
+                                >Goal: $<span id="goal-alhuda">500</span></span
+                            >
+                        </div>
                         <div class="progress-bar">
                             <div class="progress-fill" id="progress-alhuda"></div>
                         </div>
-                        <div class="progress-text">
-                            <span id="amount-alhuda">$0</span> / $<span id="goal-alhuda">500</span>
+                        <div class="progress-percentage" id="percentage-alhuda">0% Complete</div>
+                    </div>
+
+                    <div class="donation-flow">
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 1: Donate Online</p>
+                                <a
+                                    href="https://us.mohid.co/in/fishers/alhudafishers/masjid/online/donation"
+                                    target="_blank"
+                                    class="btn btn-primary"
+                                    style="width: 100%"
+                                >
+                                    Donate Online Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="step-content">
+                                <p class="step-label">Step 2: Record Your Donation</p>
+                                <button
+                                    onclick="location.href='donate.html?pantry=alhuda'"
+                                    class="btn btn-secondary"
+                                    style="width: 100%"
+                                >
+                                    Record My Donation
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="donation-flow">
-                        <p class="flow-instruction">Step 1: Donate online</p>
-                        <a
-                            href="https://us.mohid.co/in/fishers/alhudafishers/masjid/online/donation"
-                            target="_blank"
-                            class="btn btn-primary"
-                            >Donate Online Now</a
-                        >
-                        <p class="flow-instruction">Step 2: Record your donation</p>
-                        <button
-                            onclick="location.href='donate.html?pantry=alhuda'"
-                            class="btn btn-secondary"
-                        >
-                            Record My Donation
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Media Gallery Section -->
-            <section class="gallery-section">
-                <h2>Our Community in Action</h2>
-                <p>See the impact of our food pantry work through photos and videos</p>
-                <div class="media-gallery" id="media-gallery">
-                    <p class="no-data">Loading gallery...</p>
                 </div>
             </section>
 
-            <!-- Lightbox Modal -->
-            <div class="lightbox-modal" id="lightbox-modal">
-                <button class="lightbox-close" onclick="closeLightbox()">×</button>
-                <div class="lightbox-content" id="lightbox-media-content"></div>
-            </div>
-        </main>
-
-        <footer>
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h4>Supporting Our Community</h4>
-                    <p>Al-Mumineen • Al-Fajr • Al-Huda Food Pantries</p>
-                    <p>Serving families in need with dignity and compassion</p>
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">👨‍👩‍👧‍👦</div>
+                        <div class="stat-value" id="families-helped">500+</div>
+                        <div class="stat-label">Families Helped</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🤝</div>
+                        <div class="stat-value" id="volunteers-count">100+</div>
+                        <div class="stat-label">Active Volunteers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📦</div>
+                        <div class="stat-value" id="meals-provided">10,000+</div>
+                        <div class="stat-label">Meals Provided</div>
+                    </div>
                 </div>
-                <div class="footer-section">
-                    <p>
-                        Made by
-                        <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a>
+            </section>
+
+            <!-- Media Gallery Preview -->
+            <section class="media-preview-section">
+                <div class="section-header">
+                    <h2 class="section-title">Our Community in Action</h2>
+                    <p class="section-subtitle">
+                        See the impact of your contributions through photos and videos from our
+                        events
                     </p>
                 </div>
+
+                <div class="media-preview-grid" id="mediaPreview">
+                    <!-- Media preview items will be loaded here -->
+                </div>
+
+                <div class="view-all-media">
+                    <a href="/media.html" class="view-all-btn"> View All Media </a>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-wave"></div>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <span class="footer-logo-text">United Masjid Help</span>
+                    </div>
+                    <p class="footer-description">
+                        Supporting our community through Al-Mumineen, Al-Fajr, and Al-Huda food
+                        pantries. Together, we serve families in need with dignity and compassion.
+                    </p>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/volunteer.html">Volunteer</a></li>
+                        <li><a href="/media.html">Gallery</a></li>
+                        <li><a href="#donate">Donate</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Our Pantries</h4>
+                    <ul class="footer-links">
+                        <li><a href="#almumineen">Al-Mumineen</a></li>
+                        <li><a href="#alfajr">Al-Fajr</a></li>
+                        <li><a href="#alhuda">Al-Huda</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>
+                    &copy; 2025 United Masjid Help. All rights reserved. | Made by
+                    <a href="https://sahab-solutions.com" target="_blank">Sahab Solutions</a>
+                </p>
             </div>
         </footer>
 
-        <script src="js/gallery.js"></script>
-        <script src="js/index.js"></script>
+        <!-- JavaScript -->
+        <script src="js/navigation.js"></script>
+        <script src="js/home.js"></script>
     </body>
 </html>

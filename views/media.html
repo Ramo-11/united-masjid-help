@@ -3,8 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Volunteer Sign-Up</title>
-        <link rel="stylesheet" href="css/styles.css" />
+        <title>Media Gallery - United Masjid Help</title>
+
+        <!-- CSS Files -->
         <link rel="stylesheet" href="css/base.css" />
         <link rel="stylesheet" href="css/layout.css" />
         <link rel="stylesheet" href="css/media.css" />
@@ -25,12 +26,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/volunteer.html" class="nav-link active">
+                        <a href="/volunteer.html" class="nav-link">
                             <span>Volunteer</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/media.html" class="nav-link">
+                        <a href="/media.html" class="nav-link active">
                             <span>Gallery</span>
                         </a>
                     </li>
@@ -53,79 +54,50 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1>Sign up to be a Volunteer</h1>
+                <h1>Our Community in Action</h1>
                 <p>
-                    Join hands with us to fight hunger and make a real impact in your community—your
-                    time can change lives.
+                    Explore photos and videos from our food pantry initiatives, volunteer events,
+                    and community outreach programs
                 </p>
             </div>
         </section>
 
+        <!-- Media Gallery -->
         <main class="container">
-            <div class="form-container">
-                <h2>Volunteer Sign-Up</h2>
-                <p>
-                    Thank you for your interest in volunteering! Please select a time slot and
-                    provide your information.
-                </p>
+            <!-- Filter Tabs -->
+            <div class="media-filters">
+                <button class="filter-btn active" data-filter="all">All Media</button>
+                <button class="filter-btn" data-filter="photos">Photos</button>
+                <button class="filter-btn" data-filter="videos">Videos</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+            </div>
 
-                <form id="volunteer-form">
-                    <div class="form-group">
-                        <label for="volunteer-name">Full Name *</label>
-                        <input type="text" id="volunteer-name" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="volunteer-email">Email *</label>
-                        <input type="email" id="volunteer-email" required />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="volunteer-phone">Phone Number *</label>
-                        <input
-                            type="tel"
-                            id="volunteer-phone"
-                            required
-                            placeholder="(123) 456-7890"
-                        />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="volunteer-slot">Select Time Slot *</label>
-                        <select id="volunteer-slot" required>
-                            <option value="">-- Choose a time slot --</option>
-                        </select>
-                    </div>
-
-                    <div class="volunteer-details" id="volunteer-details" style="display: none">
-                        <h4>Selected Time Slot Details:</h4>
-                        <p id="slot-details"></p>
-                    </div>
-
-                    <div class="button-group">
-                        <button type="submit" class="btn btn-primary">Sign Up</button>
-                        <button type="button" onclick="location.href='/'" class="btn btn-secondary">
-                            Back to Home
-                        </button>
-                    </div>
-                </form>
-
-                <div id="success-message" class="success-message" style="display: none">
-                    <h3>✓ Thank you for signing up!</h3>
-                    <p>We've recorded your volunteer information. We look forward to seeing you!</p>
-                    <button onclick="location.reload()" class="btn btn-primary">
-                        Sign Up Another Volunteer
-                    </button>
+            <!-- Gallery Grid -->
+            <div class="media-gallery-grid" id="mediaGallery">
+                <!-- Media items will be loaded here -->
+                <div class="loading-placeholder">
+                    <div class="spinner"></div>
+                    <p>Loading gallery...</p>
                 </div>
             </div>
 
-            <div class="volunteer-list">
-                <h3>Upcoming Volunteer Opportunities</h3>
-                <div class="opportunities-grid" id="opportunities-list">
-                    <p class="no-data">Loading volunteer opportunities...</p>
-                </div>
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="btn btn-primary" id="loadMoreBtn" style="display: none">
+                    Load More
+                </button>
             </div>
         </main>
+
+        <!-- Lightbox Modal -->
+        <div class="media-lightbox" id="mediaLightbox">
+            <button class="lightbox-close" id="closeLightbox">&times;</button>
+            <button class="lightbox-nav prev" id="prevMedia">‹</button>
+            <button class="lightbox-nav next" id="nextMedia">›</button>
+            <div class="lightbox-content" id="lightboxContent">
+                <!-- Dynamic content -->
+            </div>
+        </div>
 
         <!-- Footer -->
         <footer class="footer">
@@ -147,16 +119,16 @@
                         <li><a href="/">Home</a></li>
                         <li><a href="/volunteer.html">Volunteer</a></li>
                         <li><a href="/media.html">Gallery</a></li>
-                        <li><a href="/#donate">Donate</a></li>
+                        <li><a href="#donate">Donate</a></li>
                     </ul>
                 </div>
 
                 <div class="footer-section">
                     <h4>Our Pantries</h4>
                     <ul class="footer-links">
-                        <li><a href="/#almumineen">Al-Mumineen</a></li>
-                        <li><a href="/#alfajr">Al-Fajr</a></li>
-                        <li><a href="/#alhuda">Al-Huda</a></li>
+                        <li><a href="#almumineen">Al-Mumineen</a></li>
+                        <li><a href="#alfajr">Al-Fajr</a></li>
+                        <li><a href="#alhuda">Al-Huda</a></li>
                     </ul>
                 </div>
             </div>
@@ -169,6 +141,8 @@
             </div>
         </footer>
 
-        <script src="js/volunteer.js"></script>
+        <!-- JavaScript -->
+        <script src="js/navigation.js"></script>
+        <script src="js/media-gallery.js"></script>
     </body>
 </html>
