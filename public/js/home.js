@@ -175,6 +175,15 @@ function createFoodItemsChart(pantry, goals) {
     const chartContainer = document.getElementById(`food-chart-${pantry}`);
     if (!chartContainer) return;
 
+    if (goals.length === 0) {
+        // Hide the container completely when no goals
+        chartContainer.style.display = 'none';
+        return;
+    }
+
+    // Make sure it's visible when there are goals
+    chartContainer.style.display = 'block';
+
     // Create a simple bar chart using CSS
     let html = '<div class="food-needs-chart">';
     html += '<h4>Current Food Needs</h4>';

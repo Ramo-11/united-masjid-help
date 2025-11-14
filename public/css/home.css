@@ -36,6 +36,10 @@
     line-height: 1.8;
 }
 
+.food-chart-container:empty {
+    display: none;
+}
+
 /* Pantries Grid */
 .pantries-grid {
     display: grid;
