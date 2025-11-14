@@ -51,7 +51,7 @@ header h1 {
 .pantry-card {
     background: white;
     border-radius: 10px;
-    padding: 2rem;
+    padding: 25rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
@@ -445,34 +445,6 @@ header h1 {
     border: 1px solid #f5c6cb;
 }
 
-.slot-item {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    border-left: 4px solid #218838;
-    position: relative;
-}
-
-.slot-item h4 {
-    color: #333;
-    margin-bottom: 0.5rem;
-}
-
-.slot-item p {
-    margin: 0.25rem 0;
-    color: #666;
-}
-
-.slot-item .badge {
-    display: inline-block;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-    margin-top: 0.5rem;
-}
-
 .badge-distribution {
     background: #d4edda;
     color: #155724;
@@ -488,21 +460,9 @@ header h1 {
     color: #856404;
 }
 
-.slot-item .delete-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: #dc3545;
+.badge-donation {
+    background: #6f42c1;
     color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.slot-item .delete-btn:hover {
-    background: #c82333;
 }
 
 .signups-table {

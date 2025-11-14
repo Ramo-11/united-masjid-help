@@ -79,7 +79,52 @@ db.exec(`
     type TEXT NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   );
+
+  CREATE TABLE IF NOT EXISTS food_item_goals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pantry TEXT NOT NULL,
+    category TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    unit TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(pantry, category)
+);
+
+CREATE TABLE IF NOT EXISTS food_item_achievements (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pantry TEXT NOT NULL,
+    category TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    week_start DATE NOT NULL
+);
+
 `);
+
+try {
+    // Check if pantry column exists in volunteer_slots
+    const slotColumns = db.prepare('PRAGMA table_info(volunteer_slots)').all();
+    const hasPantryColumn = slotColumns.some((col) => col.name === 'pantry');
+
+    if (!hasPantryColumn) {
+        db.prepare('ALTER TABLE volunteer_slots ADD COLUMN pantry TEXT').run();
+        console.log('Added pantry column to volunteer_slots');
+    }
+
+    // Check if contributor_name column exists in food_item_achievements
+    const achievementColumns = db.prepare('PRAGMA table_info(food_item_achievements)').all();
+    const hasContributorColumn = achievementColumns.some((col) => col.name === 'contributor_name');
+
+    if (!hasContributorColumn) {
+        db.prepare(
+            'ALTER TABLE food_item_achievements ADD COLUMN contributor_name TEXT DEFAULT "Anonymous"'
+        ).run();
+        console.log('Added contributor_name column to food_item_achievements');
+    }
+} catch (error) {
+    console.error('Migration error (non-fatal):', error);
+    // Non-fatal - these columns might already exist
+}
 
 // Cloudinary config
 cloudinary.config({
@@ -130,14 +175,24 @@ app.post('/api/admin/goal/:pantry', donationController.updateGoal);
 app.post('/api/donations', donationController.recordDonation);
 app.get('/api/donations', donationController.getDonationHistory);
 app.delete('/api/admin/donations/:pantry', donationController.clearDonations);
+app.post('/api/admin/food-goals', donationController.setFoodItemGoal);
+app.get('/api/food-goals/:pantry', donationController.getFoodItemGoals);
+app.delete('/api/admin/food-goals/:pantry/:category', donationController.deleteFoodItemGoal);
+app.post('/api/food-achievements', donationController.recordFoodItemAchievement);
+app.post('/api/admin/food-goals/contribute', donationController.recordFoodItemContribution);
+app.post('/api/admin/food-goals/complete', donationController.markFoodGoalComplete);
+app.get('/api/admin/food-history/:pantry', donationController.getFoodItemHistory);
 
 // Volunteer routes
 app.get('/api/slots', volunteerController.getAllSlots);
+app.get('/api/admin/all-slots', volunteerController.getAllSlotsAdmin);
 app.post('/api/admin/slots', volunteerController.addSlot);
 app.delete('/api/admin/slots/:id', volunteerController.deleteSlot);
 app.post('/api/volunteers', volunteerController.registerVolunteer);
 app.get('/api/admin/volunteers', volunteerController.getAllVolunteers);
 app.delete('/api/admin/volunteers/:slotId', volunteerController.clearVolunteers);
+app.put('/api/admin/slots/:id', volunteerController.updateSlot);
+app.post('/api/admin/slots/:id/complete', volunteerController.markSlotComplete);
 
 // Media routes
 app.get('/api/media', mediaController.getAllMedia);

@@ -1,0 +1,437 @@
+/* Food Goals Section Styling */
+.food-goals-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    border: 1px solid #dee2e6;
+}
+
+.food-goals-section h4 {
+    color: #218838;
+    font-size: 1.3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #218838;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.food-goals-section h4::before {
+    content: '🥫';
+    font-size: 1.5rem;
+}
+
+/* Food Summary Card */
+.food-summary-card {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.summary-stat {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.summary-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.summary-value.success {
+    color: #28a745;
+}
+
+/* Food Goals Grid */
+.food-goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.food-goal-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.25rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.food-goal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
+    transition: all 0.3s ease;
+}
+
+.food-goal-card.complete::before {
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+}
+
+.food-goal-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* Food Goal Header */
+.food-goal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.food-category-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.food-goal-delete {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #dc3545;
+    background: white;
+    color: #dc3545;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+}
+
+.food-goal-delete:hover {
+    background: #dc3545;
+    color: white;
+    transform: rotate(90deg) scale(1.1);
+}
+
+.delete-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+    font-weight: bold;
+}
+
+/* Food Goal Stats */
+.food-goal-stats {
+    margin-bottom: 1rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.stat-label.needed {
+    color: #dc3545;
+}
+
+.stat-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.stat-value.needed {
+    color: #dc3545;
+}
+
+/* Progress Bar */
+.food-goal-progress-bar {
+    margin-bottom: 1rem;
+}
+
+.progress-track {
+    height: 28px;
+    background: #f0f0f0;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%);
+    border-radius: 14px;
+    transition: width 0.5s ease;
+    position: relative;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+}
+
+.progress-fill.complete {
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+}
+
+.progress-percent {
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Food Goal Actions */
+.food-goal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contribution-form {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr auto;
+    gap: 0.5rem;
+}
+
+.contribution-input,
+.contributor-input {
+    padding: 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.contribution-input:focus,
+.contributor-input:focus {
+    outline: none;
+    border-color: #218838;
+    box-shadow: 0 0 0 3px rgba(33, 136, 56, 0.1);
+}
+
+.btn-contribute {
+    padding: 0.5rem 1rem;
+    background: #218838;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-contribute:hover {
+    background: #1a6d2e;
+    transform: translateY(-1px);
+}
+
+.btn-mark-complete {
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.btn-mark-complete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.complete-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 6px;
+    font-weight: 600;
+    width: 100%;
+}
+
+.slot-item {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-top: 3.5rem;
+}
+
+.slot-edit-mode {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.slot-edit-mode input,
+.slot-edit-mode select {
+    width: 100%;
+}
+
+.slot-item h4 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.slot-item p {
+    margin: 0.25rem 0;
+    color: #666;
+}
+
+.slot-item .badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.slot-item .delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.slot-item .delete-btn:hover {
+    background: #c82333;
+}
+
+.slot-edit-mode input,
+.slot-edit-mode select {
+    margin-bottom: 0.5rem;
+}
+
+/* Notification System */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    font-weight: 500;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.notification-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.notification-info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+/* No Food Goals Message */
+.no-food-goals {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px dashed #dee2e6;
+}
+
+.food-goals-section input[type='text'],
+.food-goals-section input[type='email'],
+.food-goals-section input[type='tel'],
+.food-goals-section input[type='number'],
+.food-goals-section input[type='date'],
+.food-goals-section input[type='password'],
+.food-goals-section select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.food-goals-section input:focus,
+.food-goals-section select:focus {
+    outline: none;
+    border-color: #218838;
+}
+
+/* Pantry Selection Group */
+#pantry-selection-group {
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        max-height: 100px;
+    }
+}

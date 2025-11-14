@@ -6,6 +6,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     updateAllProgress();
     loadMediaPreview();
+    loadFoodItemsChart();
 
     // Refresh progress every 30 seconds
     setInterval(updateAllProgress, 30000);
@@ -150,6 +151,70 @@ async function loadMediaPreview() {
                 '<p style="grid-column: 1/-1; text-align: center; color: var(--text-secondary);">Unable to load media.</p>';
         }
     }
+}
+
+// Food Items Chart Display
+async function loadFoodItemsChart() {
+    const pantries = ['almumineen', 'alfajr', 'alhuda'];
+
+    for (const pantry of pantries) {
+        try {
+            const response = await fetch(`/api/food-goals/${pantry}`);
+            const goals = await response.json();
+
+            if (goals.length > 0) {
+                createFoodItemsChart(pantry, goals);
+            }
+        } catch (error) {
+            console.error(`Error loading food goals for ${pantry}:`, error);
+        }
+    }
+}
+
+function createFoodItemsChart(pantry, goals) {
+    const chartContainer = document.getElementById(`food-chart-${pantry}`);
+    if (!chartContainer) return;
+
+    // Create a simple bar chart using CSS
+    let html = '<div class="food-needs-chart">';
+    html += '<h4>Current Food Needs</h4>';
+    html += '<div class="chart-bars">';
+
+    goals.forEach((goal) => {
+        const percentage = Math.min((goal.achieved / goal.amount) * 100, 100);
+        const needed = goal.amount - goal.achieved;
+
+        html += `
+            <div class="chart-item">
+                <div class="chart-label">${goal.category}</div>
+                <div class="chart-bar-container">
+                    <div class="chart-bar-fill" style="width: ${percentage}%">
+                        <span class="chart-value">${goal.achieved}/${goal.amount} ${
+            goal.unit
+        }</span>
+                    </div>
+                </div>
+                ${
+                    needed > 0
+                        ? `<div class="chart-need">Need: ${needed} ${goal.unit}</div>`
+                        : '<div class="chart-complete">✓ Complete</div>'
+                }
+            </div>
+        `;
+    });
+
+    html += '</div>';
+
+    // Add CTA section
+    html += `
+        <div class="food-needs-cta">
+            <p>Help us meet our weekly food goals!</p>
+            <a href="/volunteer.html" class="btn btn-accent">Volunteer to Help</a>
+        </div>
+    `;
+
+    html += '</div>';
+    chartContainer.innerHTML = html;
 }
 
 // Utility function to escape HTML

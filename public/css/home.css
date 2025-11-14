@@ -39,7 +39,7 @@
 /* Pantries Grid */
 .pantries-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
     gap: var(--spacing-xl);
     margin: var(--spacing-2xl) 0;
 }
@@ -369,6 +369,81 @@
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.food-chart-container {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+}
+
+.food-needs-chart h4 {
+    color: var(--primary-color);
+    margin-bottom: var(--spacing-md);
+}
+
+.chart-bars {
+    margin-bottom: var(--spacing-lg);
+}
+
+.chart-item {
+    margin-bottom: var(--spacing-md);
+}
+
+.chart-label {
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+}
+
+.chart-bar-container {
+    height: 30px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+}
+
+.chart-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+    display: flex;
+    align-items: center;
+    padding: 0 var(--spacing-sm);
+    transition: width var(--transition-slow);
+}
+
+.chart-value {
+    font-size: 0.85rem;
+    color: black;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.chart-need {
+    font-size: 0.85rem;
+    color: var(--accent-color);
+    margin-top: var(--spacing-xs);
+}
+
+.chart-complete {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+    margin-top: var(--spacing-xs);
+    font-weight: 600;
+}
+
+.food-needs-cta {
+    text-align: center;
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+}
+
+.food-needs-cta p {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 /* Responsive Design */

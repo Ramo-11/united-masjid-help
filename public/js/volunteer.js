@@ -55,7 +55,12 @@ function populateSlotDropdown(slots) {
                 year: 'numeric',
             });
 
-            option.textContent = `${formattedDate} - ${slot.time} - ${slot.location} (${slot.signupCount}/${slot.max_volunteers} signed up)`;
+            option.textContent = `${formattedDate} - ${slot.time} - ${slot.location}${
+                slot.type === 'Item Donation' && slot.pantry
+                    ? ' (' + getPantryDisplayName(slot.pantry) + ')'
+                    : ''
+            } (${slot.signupCount}/${slot.max_volunteers} signed up)`;
+
             slotSelect.appendChild(option);
         }
     });
@@ -100,21 +105,37 @@ function displayOpportunities(slots) {
         const isFull = slot.signupCount >= slot.max_volunteers;
 
         html += `
-            <div class="opportunity-card ${isFull ? 'full' : ''}">
-                <div class="date-badge">${dateBadge}</div>
-                <h4>${slot.location}</h4>
-                ${slot.address ? `<p>📍 ${slot.address}</p>` : ''}
-                <p>🕐 ${fullDate}</p>
-                <p>⏰ ${slot.time}</p>
-                <p><strong>Type:</strong> ${slot.type}</p>
-                <p><strong>Spots:</strong> ${slot.signupCount} / ${slot.max_volunteers} ${
+        <div class="opportunity-card ${isFull ? 'full' : ''}">
+            <div class="date-badge">${dateBadge}</div>
+            <h4>${slot.location}</h4>
+            ${slot.address ? `<p>📍 ${slot.address}</p>` : ''}
+            <p>🕐 ${fullDate}</p>
+            <p>⏰ ${slot.time}</p>
+            <p><strong>Type:</strong> ${slot.type}</p>
+            ${
+                slot.type === 'Item Donation' && slot.pantry
+                    ? `
+                <p><strong>Pantry:</strong> ${getPantryDisplayName(slot.pantry)}</p>
+            `
+                    : ''
+            }
+            <p><strong>Spots:</strong> ${slot.signupCount} / ${slot.max_volunteers} ${
             isFull ? '(FULL)' : ''
         }</p>
-            </div>
-        `;
+        </div>
+    `;
     });
 
     opportunitiesList.innerHTML = html;
+}
+
+function getPantryDisplayName(pantry) {
+    const names = {
+        almumineen: 'Al-Mumineen',
+        alfajr: 'Al-Fajr',
+        alhuda: 'Al-Huda',
+    };
+    return names[pantry] || pantry;
 }
 
 // Show slot details when selected

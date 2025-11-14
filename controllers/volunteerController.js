@@ -4,13 +4,32 @@ const db = new Database(dbPath);
 
 // Get all volunteer slots
 exports.getAllSlots = (req, res) => {
+    // Add WHERE clause to exclude completed slots
+    const slots = db
+        .prepare(
+            'SELECT * FROM volunteer_slots WHERE (completed IS NULL OR completed = 0) ORDER BY date ASC'
+        )
+        .all();
+
+    const slotsWithCounts = slots.map((slot) => {
+        const count = db
+            .prepare('SELECT COUNT(*) as count FROM volunteers WHERE slot_id = ?')
+            .get(slot.id).count;
+        return { ...slot, signupCount: count, pantry: slot.pantry || null };
+    });
+
+    res.json(slotsWithCounts);
+};
+
+exports.getAllSlotsAdmin = (req, res) => {
+    // Include ALL slots for admin view
     const slots = db.prepare('SELECT * FROM volunteer_slots ORDER BY date ASC').all();
 
     const slotsWithCounts = slots.map((slot) => {
         const count = db
             .prepare('SELECT COUNT(*) as count FROM volunteers WHERE slot_id = ?')
             .get(slot.id).count;
-        return { ...slot, signupCount: count };
+        return { ...slot, signupCount: count, pantry: slot.pantry || null };
     });
 
     res.json(slotsWithCounts);
@@ -22,14 +41,14 @@ exports.addSlot = (req, res) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const { id, date, time, location, address, type, maxVolunteers } = req.body;
+    const { id, date, time, location, address, type, maxVolunteers, pantry } = req.body;
 
     const stmt = db.prepare(`
-        INSERT INTO volunteer_slots (id, date, time, location, address, type, max_volunteers)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO volunteer_slots (id, date, time, location, address, type, max_volunteers, pantry)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
-    stmt.run(id, date, time, location, address || '', type, maxVolunteers);
+    stmt.run(id, date, time, location, address || '', type, maxVolunteers, pantry || null);
 
     res.json({ success: true });
 };
@@ -105,4 +124,48 @@ exports.clearVolunteers = (req, res) => {
     }
 
     res.json({ success: true });
+};
+
+// Update volunteer slot
+exports.updateSlot = (req, res) => {
+    if (!req.body.password || req.body.password !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+    const { date, time, location, address, type, maxVolunteers, pantry } = req.body;
+
+    const stmt = db.prepare(`
+        UPDATE volunteer_slots 
+        SET date = ?, time = ?, location = ?, address = ?, type = ?, max_volunteers = ?, pantry = ?
+        WHERE id = ?
+    `);
+
+    stmt.run(date, time, location, address || '', type, maxVolunteers, pantry || null, id);
+    res.json({ success: true });
+};
+
+// Mark slot as complete (archive it)
+exports.markSlotComplete = (req, res) => {
+    if (!req.body.password || req.body.password !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+
+    // Check if column exists first
+    try {
+        const columns = db.prepare('PRAGMA table_info(volunteer_slots)').all();
+        const hasCompletedColumn = columns.some((col) => col.name === 'completed');
+
+        if (!hasCompletedColumn) {
+            db.prepare('ALTER TABLE volunteer_slots ADD COLUMN completed BOOLEAN DEFAULT 0').run();
+        }
+
+        db.prepare('UPDATE volunteer_slots SET completed = 1 WHERE id = ?').run(id);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error marking slot complete:', error);
+        res.status(500).json({ error: 'Failed to mark slot complete' });
+    }
 };

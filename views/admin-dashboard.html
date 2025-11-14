@@ -4,6 +4,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Admin Dashboard</title>
+
+        <link rel="stylesheet" href="css/admin-dashboard.css" />
         <link rel="stylesheet" href="css/styles.css" />
         <link rel="stylesheet" href="css/old_nav.css" />
         <link rel="stylesheet" href="css/gallery.css" />
@@ -41,6 +43,38 @@
                     <button onclick="updateGoal('almumineen')" class="btn btn-primary">
                         Update Goal
                     </button>
+                    <div class="food-goals-section">
+                        <h4>Weekly Food Item Goals</h4>
+
+                        <!-- Summary Section -->
+                        <div id="food-summary-almumineen"></div>
+
+                        <!-- Add New Goal Form -->
+                        <div class="form-row">
+                            <input
+                                type="text"
+                                id="food-category-almumineen"
+                                placeholder="Item Category (e.g., Canned Tomatoes)"
+                            />
+                            <input
+                                type="number"
+                                id="food-amount-almumineen"
+                                placeholder="Target Amount"
+                                min="1"
+                            />
+                            <input
+                                type="text"
+                                id="food-unit-almumineen"
+                                placeholder="Unit (cans, lbs, bags)"
+                            />
+                            <button onclick="addFoodItemGoal('almumineen')" class="btn btn-primary">
+                                <span style="margin-right: 0.5rem">➕</span> Add Food Goal
+                            </button>
+                        </div>
+
+                        <!-- Goals Display -->
+                        <div id="food-goals-almumineen" class="food-goals-display"></div>
+                    </div>
                 </div>
 
                 <div class="admin-section">
@@ -52,6 +86,38 @@
                     <button onclick="updateGoal('alfajr')" class="btn btn-primary">
                         Update Goal
                     </button>
+                    <div class="food-goals-section">
+                        <h4>Weekly Food Item Goals</h4>
+
+                        <!-- Summary Section -->
+                        <div id="food-summary-alfajr"></div>
+
+                        <!-- Add New Goal Form -->
+                        <div class="form-row">
+                            <input
+                                type="text"
+                                id="food-category-alfajr"
+                                placeholder="Item Category (e.g., Canned Tomatoes)"
+                            />
+                            <input
+                                type="number"
+                                id="food-amount-alfajr"
+                                placeholder="Target Amount"
+                                min="1"
+                            />
+                            <input
+                                type="text"
+                                id="food-unit-alfajr"
+                                placeholder="Unit (cans, lbs, bags)"
+                            />
+                            <button onclick="addFoodItemGoal('alfajr')" class="btn btn-primary">
+                                <span style="margin-right: 0.5rem">➕</span> Add Food Goal
+                            </button>
+                        </div>
+
+                        <!-- Goals Display -->
+                        <div id="food-goals-alfajr" class="food-goals-display"></div>
+                    </div>
                 </div>
 
                 <div class="admin-section">
@@ -63,6 +129,38 @@
                     <button onclick="updateGoal('alhuda')" class="btn btn-primary">
                         Update Goal
                     </button>
+                    <div class="food-goals-section">
+                        <h4>Weekly Food Item Goals</h4>
+
+                        <!-- Summary Section -->
+                        <div id="food-summary-alhuda"></div>
+
+                        <!-- Add New Goal Form -->
+                        <div class="form-row">
+                            <input
+                                type="text"
+                                id="food-category-alhuda"
+                                placeholder="Item Category (e.g., Canned Tomatoes)"
+                            />
+                            <input
+                                type="number"
+                                id="food-amount-alhuda"
+                                placeholder="Target Amount"
+                                min="1"
+                            />
+                            <input
+                                type="text"
+                                id="food-unit-alhuda"
+                                placeholder="Unit (cans, lbs, bags)"
+                            />
+                            <button onclick="addFoodItemGoal('alhuda')" class="btn btn-primary">
+                                <span style="margin-right: 0.5rem">➕</span> Add Food Goal
+                            </button>
+                        </div>
+
+                        <!-- Goals Display -->
+                        <div id="food-goals-alhuda" class="food-goals-display"></div>
+                    </div>
                 </div>
             </div>
 
@@ -111,13 +209,22 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="slot-type">Type</label>
-                                <select id="slot-type" required>
+                                <select id="slot-type" required onchange="togglePantrySelection()">
                                     <option value="Distribution">Distribution</option>
                                     <option value="Transportation">Transportation</option>
                                     <option value="Distribution & Transportation">
                                         Distribution & Transportation
                                     </option>
+                                    <option value="Item Donation">Item Donation</option>
                                     <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="pantry-selection-group">
+                                <label for="slot-pantry">Select Pantry</label>
+                                <select id="slot-pantry">
+                                    <option value="almumineen">Al-Mumineen</option>
+                                    <option value="alfajr">Al-Fajr</option>
+                                    <option value="alhuda">Al-Huda</option>
                                 </select>
                             </div>
                             <div class="form-group">
