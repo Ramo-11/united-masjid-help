@@ -187,6 +187,7 @@ async function loadVolunteerSlots() {
             let badgeClass = 'badge-other';
             if (slot.type === 'Distribution') badgeClass = 'badge-distribution';
             if (slot.type === 'Transportation') badgeClass = 'badge-transportation';
+            if (slot.type === 'Packing') badgeClass = 'badge-packing';
             if (slot.type === 'Item Donation') badgeClass = 'badge-donation';
 
             // Check if slot is completed
@@ -260,6 +261,9 @@ async function loadVolunteerSlots() {
                             <option value="Transportation" ${
                                 slot.type === 'Transportation' ? 'selected' : ''
                             }>Transportation</option>
+                            <option value="Packing" ${
+                                slot.type === 'Packing' ? 'selected' : ''
+                            }>Packing</option>
                             <option value="Item Donation" ${
                                 slot.type === 'Item Donation' ? 'selected' : ''
                             }>Item Donation</option>

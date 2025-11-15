@@ -102,18 +102,24 @@ CREATE TABLE IF NOT EXISTS food_item_achievements (
 `);
 
 try {
-    // Check if pantry column exists in volunteer_slots
+    // volunteer_slots: pantry
     const slotColumns = db.prepare('PRAGMA table_info(volunteer_slots)').all();
-    const hasPantryColumn = slotColumns.some((col) => col.name === 'pantry');
+    const hasPantryColumn = slotColumns.some((c) => c.name === 'pantry');
+    const hasCompletedColumn = slotColumns.some((c) => c.name === 'completed');
 
     if (!hasPantryColumn) {
         db.prepare('ALTER TABLE volunteer_slots ADD COLUMN pantry TEXT').run();
         console.log('Added pantry column to volunteer_slots');
     }
 
-    // Check if contributor_name column exists in food_item_achievements
+    if (!hasCompletedColumn) {
+        db.prepare('ALTER TABLE volunteer_slots ADD COLUMN completed INTEGER DEFAULT 0').run();
+        console.log('Added completed column to volunteer_slots');
+    }
+
+    // food_item_achievements: contributor_name
     const achievementColumns = db.prepare('PRAGMA table_info(food_item_achievements)').all();
-    const hasContributorColumn = achievementColumns.some((col) => col.name === 'contributor_name');
+    const hasContributorColumn = achievementColumns.some((c) => c.name === 'contributor_name');
 
     if (!hasContributorColumn) {
         db.prepare(
@@ -121,9 +127,8 @@ try {
         ).run();
         console.log('Added contributor_name column to food_item_achievements');
     }
-} catch (error) {
-    console.error('Migration error (non-fatal):', error);
-    // Non-fatal - these columns might already exist
+} catch (err) {
+    console.error('Migration error (non-fatal):', err);
 }
 
 // Cloudinary config
