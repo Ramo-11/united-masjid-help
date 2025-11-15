@@ -1,17 +1,20 @@
 /* ============================================
-   HOME PAGE STYLES
+   HOME PAGE SPECIFIC STYLES
    ============================================ */
 
 /* Intro Section */
 .intro-section {
-    padding: var(--spacing-2xl) 0;
+    padding: 3rem 0;
     text-align: center;
+    background: white;
+    border-radius: var(--border-radius);
+    margin: 2rem 0;
 }
 
 .intro-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
     color: var(--text-primary);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 1rem;
     position: relative;
     display: inline-block;
 }
@@ -24,35 +27,32 @@
     transform: translateX(-50%);
     width: 60px;
     height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: var(--radius-full);
+    background: var(--primary-color);
+    border-radius: 2px;
 }
 
 .intro-description {
-    font-size: 1.2rem;
+    font-size: 1.125rem;
     color: var(--text-secondary);
     max-width: 700px;
-    margin: var(--spacing-xl) auto;
-    line-height: 1.8;
-}
-
-.food-chart-container:empty {
-    display: none;
+    margin: 1.5rem auto;
+    line-height: 1.7;
 }
 
 /* Pantries Grid */
 .pantries-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: var(--spacing-xl);
-    margin: var(--spacing-2xl) 0;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
 }
 
 .pantry-card {
-    background: var(--bg-primary);
-    border-radius: var(--radius-xl);
-    padding: var(--spacing-xl);
-    box-shadow: var(--shadow-md);
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
     transition: all var(--transition-slow);
     position: relative;
     overflow: hidden;
@@ -64,15 +64,15 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 5px;
+    height: 4px;
     background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
     transform: scaleX(0);
     transition: transform var(--transition-slow);
 }
 
 .pantry-card:hover {
-    transform: translateY(-6px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .pantry-card:hover::before {
@@ -80,28 +80,26 @@
 }
 
 .pantry-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: 1.5rem;
 }
 
 .pantry-title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     color: var(--text-primary);
     font-weight: 700;
+    margin-bottom: 0;
 }
 
 /* Progress Bar */
 .progress-container {
-    margin: var(--spacing-lg) 0;
+    margin: 1.5rem 0;
 }
 
 .progress-stats {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 0.75rem;
 }
 
 .progress-current {
@@ -116,21 +114,19 @@
 }
 
 .progress-bar {
-    height: 12px;
+    height: 10px;
     background: var(--bg-tertiary);
-    border-radius: var(--radius-full);
+    border-radius: 10px;
     overflow: hidden;
     position: relative;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
 }
 
 .progress-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
-    border-radius: var(--radius-full);
+    border-radius: 10px;
     transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 2px 8px rgba(33, 136, 56, 0.3);
 }
 
 .progress-fill::after {
@@ -140,7 +136,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -155,8 +151,8 @@
 
 .progress-percentage {
     text-align: center;
-    margin-top: var(--spacing-xs);
-    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
     font-weight: 600;
 }
@@ -165,94 +161,160 @@
 .donation-flow {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
+    gap: 1rem;
+    margin-top: 1.5rem;
 }
 
 .flow-step {
     display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
-.step-number {
-    width: 30px;
-    height: 30px;
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-full);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary-color);
-    font-weight: bold;
-    font-size: 0.9rem;
-    flex-shrink: 0;
-}
-
-.step-content {
-    flex: 1;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .step-label {
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-xs);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
+    font-weight: 600;
 }
 
-/* Media Gallery Preview Section */
+/* Food Chart */
+.food-chart-container {
+    margin: 1.5rem 0;
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+}
+
+.food-chart-container:empty {
+    display: none;
+}
+
+.food-needs-chart h4 {
+    color: var(--primary-dark);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.chart-bars {
+    margin-bottom: 1.5rem;
+}
+
+.chart-item {
+    margin-bottom: 1rem;
+}
+
+.chart-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.chart-bar-container {
+    height: 28px;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.chart-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    transition: width var(--transition-slow);
+}
+
+.chart-value {
+    font-size: 0.8rem;
+    color: var(--text-primary); /* Changed from white to dark text */
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 0 0.5rem;
+}
+
+.chart-need {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    margin-top: 0.25rem;
+}
+
+.chart-complete {
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    margin-top: 0.25rem;
+    font-weight: 600;
+}
+
+.food-needs-cta {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.food-needs-cta p {
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+/* Media Preview Section */
 .media-preview-section {
-    padding: var(--spacing-2xl) 0;
-    background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    padding: 4rem 0;
+    background: linear-gradient(180deg, transparent 0%, white 50%);
 }
 
 .section-header {
     text-align: center;
-    margin-bottom: var(--spacing-2xl);
+    margin-bottom: 3rem;
 }
 
 .section-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
     color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
-    position: relative;
-    display: inline-block;
+    margin-bottom: 0.5rem;
 }
 
 .section-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-xl);
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .media-preview-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: var(--spacing-lg);
-    margin-bottom: var(--spacing-xl);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
 .media-preview-item {
-    background: var(--bg-primary);
-    border-radius: var(--radius-lg);
+    background: white;
+    border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
     transition: all var(--transition-slow);
     cursor: pointer;
     position: relative;
     aspect-ratio: 16 / 9;
+    border: 1px solid var(--border-color);
 }
 
 .media-preview-item:hover {
-    transform: scale(1.03);
-    box-shadow: var(--shadow-xl);
+    transform: scale(1.02);
+    box-shadow: var(--shadow-md);
 }
 
 .media-preview-image {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
 .media-preview-overlay {
@@ -261,11 +323,11 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.7) 100%);
+    background: linear-gradient(180deg, transparent 50%, rgba(0, 0, 0, 0.8) 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: var(--spacing-md);
+    padding: 1rem;
     opacity: 0;
     transition: opacity var(--transition-base);
 }
@@ -276,20 +338,20 @@
 
 .media-preview-title {
     color: white;
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-xs);
+    margin: 0;
 }
 
 .media-preview-type {
     position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    background: rgba(0, 0, 0, 0.7);
+    top: 0.75rem;
+    right: 0.75rem;
+    background: rgba(0, 0, 0, 0.75);
     color: white;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--radius-md);
-    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
     backdrop-filter: blur(10px);
@@ -297,26 +359,25 @@
 
 .view-all-media {
     text-align: center;
-    margin-top: var(--spacing-xl);
+    margin-top: 2rem;
 }
 
 .view-all-btn {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md) var(--spacing-xl);
-    background: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--primary-color);
     color: white;
-    border-radius: var(--radius-full);
+    border-radius: 10px;
     font-weight: 600;
     text-decoration: none;
     transition: all var(--transition-base);
-    box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.3);
 }
 
 .view-all-btn:hover {
-    transform: translateY(-3px);
-    /* box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); */
+    background: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 .view-all-btn::after {
@@ -325,140 +386,108 @@
 }
 
 .view-all-btn:hover::after {
-    transform: translateX(5px);
+    transform: translateX(4px);
 }
 
 /* Statistics Section */
 .stats-section {
-    padding: var(--spacing-2xl) 0;
-    background: var(--bg-primary);
+    padding: 4rem 0;
+    background: white;
+    border-radius: var(--border-radius);
+    margin: 3rem 0;
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing-xl);
+    gap: 2rem;
     max-width: 900px;
     margin: 0 auto;
 }
 
 .stat-card {
     text-align: center;
-    padding: var(--spacing-xl);
+    padding: 1.5rem;
 }
 
 .stat-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto var(--spacing-md);
-    background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
-    border-radius: var(--radius-full);
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1rem;
+    background: var(--primary-bg);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    box-shadow: 0 4px 14px 0 rgba(33, 136, 56, 0.2);
+    color: var(--primary-color);
+    font-size: 1.75rem;
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-xs);
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
 }
 
 .stat-label {
     font-size: 0.9rem;
     color: var(--text-secondary);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
 }
 
-.food-chart-container {
-    margin: var(--spacing-lg) 0;
-    padding: var(--spacing-lg);
-    background: var(--bg-tertiary);
-    border-radius: var(--radius-md);
-}
-
-.food-needs-chart h4 {
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-md);
-}
-
-.chart-bars {
-    margin-bottom: var(--spacing-lg);
-}
-
-.chart-item {
-    margin-bottom: var(--spacing-md);
-}
-
-.chart-label {
-    font-weight: 600;
-    margin-bottom: var(--spacing-xs);
-    color: var(--text-primary);
-}
-
-.chart-bar-container {
-    height: 30px;
-    background: var(--bg-secondary);
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    position: relative;
-}
-
-.chart-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    padding: 0 var(--spacing-sm);
-    transition: width var(--transition-slow);
+    justify-content: center;
+    transition: all var(--transition-base);
+    backdrop-filter: blur(4px);
 }
 
-.chart-value {
-    font-size: 0.85rem;
-    color: black;
-    font-weight: 600;
-    white-space: nowrap;
+.play-overlay::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 20px solid white;
+    border-top: 12px solid transparent;
+    border-bottom: 12px solid transparent;
+    margin-left: 4px;
 }
 
-.chart-need {
-    font-size: 0.85rem;
-    color: var(--accent-color);
-    margin-top: var(--spacing-xs);
+.media-preview-item:hover .play-overlay {
+    background: var(--primary-color);
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
-.chart-complete {
-    font-size: 0.85rem;
-    color: var(--primary-color);
-    margin-top: var(--spacing-xs);
-    font-weight: 600;
-}
-
-.food-needs-cta {
-    text-align: center;
-    padding-top: var(--spacing-lg);
-    border-top: 1px solid var(--border-color);
-}
-
-.food-needs-cta p {
-    margin-bottom: var(--spacing-md);
-    color: var(--text-secondary);
-    font-weight: 500;
+/* Goal Met State */
+.pantry-card.goal-met {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border-color: var(--primary-light);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .intro-title {
-        font-size: 2rem;
+    .intro-section {
+        padding: 2rem 1rem;
+        margin: 1rem 0;
     }
 
     .pantries-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        gap: 1.5rem;
+    }
+
+    .pantry-card {
+        padding: 1.5rem;
     }
 
     .media-preview-grid {
@@ -467,10 +496,10 @@
 
     .stats-grid {
         grid-template-columns: 1fr;
-        gap: var(--spacing-lg);
+        gap: 1.5rem;
     }
 
     .section-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
     }
 }
