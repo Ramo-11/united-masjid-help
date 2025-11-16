@@ -260,7 +260,16 @@ exports.markItemDonationComplete = (req, res) => {
     if (!donation) return res.status(404).json({ error: 'Donation not found' });
 
     const items = JSON.parse(donation.items);
-    const weekStart = getMonday(new Date(donation.date));
+
+    // Use CURRENT week, not donation date week
+    const weekStart = getMonday(new Date()); // <-- Changed this line
+
+    console.log('Marking donation complete:', {
+        pantry: donation.pantry,
+        items: items,
+        weekStart: weekStart,
+        currentDate: new Date().toISOString(),
+    });
 
     const insert = db.prepare(`
         INSERT INTO food_item_achievements (pantry, category, amount, week_start)
@@ -270,6 +279,7 @@ exports.markItemDonationComplete = (req, res) => {
 
     const txn = db.transaction(() => {
         items.forEach((item) => {
+            console.log('Adding achievement:', item.category, item.amount, 'for week:', weekStart);
             insert.run(donation.pantry, item.category, item.amount, weekStart);
         });
 

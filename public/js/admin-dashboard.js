@@ -1022,7 +1022,12 @@ async function loadItemDonationVolunteers() {
 }
 
 async function markItemDonationComplete(id) {
-    if (!confirm('Mark this item donation as complete?')) return;
+    if (
+        !confirm(
+            'Mark this item donation as complete? This will update the food item achievements.'
+        )
+    )
+        return;
 
     try {
         const response = await fetch(`/api/admin/item-donation/${id}/complete`, {
@@ -1032,8 +1037,13 @@ async function markItemDonationComplete(id) {
         });
 
         if (response.ok) {
+            // Reload both item donations and food goals to reflect the update
             loadItemDonationVolunteers();
-            showNotification('Item donation marked as complete', 'success');
+            loadFoodItemGoals();
+            showNotification('Item donation marked as complete and food goals updated!', 'success');
+        } else {
+            const error = await response.json();
+            showNotification(error.error || 'Error updating status', 'error');
         }
     } catch (error) {
         console.error('Error:', error);

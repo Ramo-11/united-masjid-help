@@ -126,6 +126,10 @@ exports.getFoodItemGoals = (req, res) => {
 
     // Get current week achievements
     const weekStart = getMonday();
+
+    console.log('Getting food goals for pantry:', pantry);
+    console.log('Week start:', weekStart);
+
     const achievements = db
         .prepare(
             `
@@ -137,15 +141,21 @@ exports.getFoodItemGoals = (req, res) => {
         )
         .all(pantry, weekStart);
 
+    console.log('Achievements found:', achievements);
+
     const achievementMap = {};
     achievements.forEach((a) => {
         achievementMap[a.category] = a.total;
     });
 
+    console.log('Achievement map:', achievementMap);
+
     const result = goals.map((g) => ({
         ...g,
         achieved: achievementMap[g.category] || 0,
     }));
+
+    console.log('Final result:', result);
 
     res.json(result);
 };

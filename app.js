@@ -14,7 +14,6 @@ const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pant
 const db = new Database(dbPath);
 
 // Initialize database tables
-db.exec(`DROP TABLE food_item_achievements;`);
 db.exec(`
   CREATE TABLE IF NOT EXISTS pantry_goals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,8 +95,9 @@ CREATE TABLE IF NOT EXISTS food_item_achievements (
     pantry TEXT NOT NULL,
     category TEXT NOT NULL,
     amount INTEGER NOT NULL,
+    week_start TEXT NOT NULL,
+    contributor_name TEXT DEFAULT 'Anonymous',
     recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    week_start DATE NOT NULL,
     UNIQUE(pantry, category, week_start)
 );
 

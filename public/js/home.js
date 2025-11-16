@@ -162,6 +162,8 @@ async function loadFoodItemsChart() {
             const response = await fetch(`/api/food-goals/${pantry}`);
             const goals = await response.json();
 
+            console.log(`Food goals for ${pantry}:`, goals);
+
             if (goals.length > 0) {
                 createFoodItemsChart(pantry, goals);
             }
@@ -182,19 +184,38 @@ function createFoodItemsChart(pantry, goals) {
 
     chartContainer.style.display = 'block';
 
+    // Check if all goals are complete
+    const allComplete = goals.every((goal) => goal.achieved >= goal.amount);
+    const hasNeeds = goals.some((goal) => goal.achieved < goal.amount);
+
     let html = '<div class="food-needs-chart">';
     html += '<h4>Current Food Needs</h4>';
+
+    if (allComplete) {
+        html +=
+            '<div class="alert alert-success" style="margin-bottom: 1rem;">✓ All food needs met for this week! Thank you!</div>';
+    }
+
     html += '<div class="chart-bars">';
 
     goals.forEach((goal) => {
         const percentage = Math.min((goal.achieved / goal.amount) * 100, 100);
-        const needed = goal.amount - goal.achieved;
+        const needed = Math.max(0, goal.amount - goal.achieved);
+        const isComplete = goal.achieved >= goal.amount;
 
         html += `
-            <div class="chart-item">
-                <div class="chart-label">${goal.category}</div>
+            <div class="chart-item ${isComplete ? 'complete' : ''}">
+                <div class="chart-label" style="${
+                    isComplete ? 'color: var(--primary-color);' : ''
+                }">${goal.category}</div>
                 <div class="chart-bar-container">
-                    <div class="chart-bar-fill" style="width: ${percentage}%">
+                    <div class="chart-bar-fill ${
+                        isComplete ? 'complete' : ''
+                    }" style="width: ${percentage}%; background: ${
+            isComplete
+                ? 'var(--primary-color)'
+                : 'linear-gradient(90deg, var(--accent-color), var(--accent-light))'
+        };">
                         <span class="chart-value">${goal.achieved}/${goal.amount} ${
             goal.unit
         }</span>
@@ -203,7 +224,7 @@ function createFoodItemsChart(pantry, goals) {
                 ${
                     needed > 0
                         ? `<div class="chart-need">Need: ${needed} ${goal.unit}</div>`
-                        : '<div class="chart-complete">✓ Complete</div>'
+                        : '<div class="chart-complete" style="color: var(--primary-color); font-weight: 600;">✓ Complete</div>'
                 }
             </div>
         `;
@@ -211,13 +232,15 @@ function createFoodItemsChart(pantry, goals) {
 
     html += '</div>';
 
-    // Updated CTA section with item donation option
-    html += `
-        <div class="food-needs-cta">
-            <p>Help us meet our weekly food goals!</p>
-            <a href="/volunteer-items.html?pantry=${pantry}" class="btn btn-accent">Bring Items</a>
-        </div>
-    `;
+    // Only show CTA if there are still needs
+    if (hasNeeds) {
+        html += `
+            <div class="food-needs-cta">
+                <p>Help us meet our weekly food goals!</p>
+                <a href="/volunteer-items.html?pantry=${pantry}" class="btn btn-accent">Bring Items</a>
+            </div>
+        `;
+    }
 
     html += '</div>';
     chartContainer.innerHTML = html;
