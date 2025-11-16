@@ -212,6 +212,90 @@
                         <div id="food-goals-alhuda" class="food-goals-display"></div>
                     </div>
                 </div>
+
+                <div class="admin-section">
+                    <h3>Al-Salam Food Pantry</h3>
+                    <div class="form-group">
+                        <label for="goal-alsalam">Weekly Goal ($)</label>
+                        <input type="number" id="goal-alsalam" min="0" step="1" value="500" />
+                    </div>
+                    <button onclick="updateGoal('alsalam')" class="btn btn-primary">
+                        Update Goal
+                    </button>
+                    <div class="food-goals-section">
+                        <h4>Weekly Food Item Goals</h4>
+
+                        <!-- Summary Section -->
+                        <div id="food-summary-alsalam"></div>
+
+                        <!-- Add New Goal Form -->
+                        <div class="form-row">
+                            <input
+                                type="text"
+                                id="food-category-alsalam"
+                                placeholder="Item Category (e.g., Canned Tomatoes)"
+                            />
+                            <input
+                                type="number"
+                                id="food-amount-alsalam"
+                                placeholder="Target Amount"
+                                min="1"
+                            />
+                            <input
+                                type="text"
+                                id="food-unit-alsalam"
+                                placeholder="Unit (cans, lbs, bags)"
+                            />
+                            <button onclick="addFoodItemGoal('alsalam')" class="btn btn-primary">
+                                <span style="margin-right: 0.5rem">➕</span> Add Food Goal
+                            </button>
+                        </div>
+
+                        <!-- Goals Display -->
+                        <div id="food-goals-alsalam" class="food-goals-display"></div>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Geist Community Center Food Pantry</h3>
+                    <div class="form-group">
+                        <label for="goal-gcc">Weekly Goal ($)</label>
+                        <input type="number" id="goal-gcc" min="0" step="1" value="500" />
+                    </div>
+                    <button onclick="updateGoal('gcc')" class="btn btn-primary">Update Goal</button>
+                    <div class="food-goals-section">
+                        <h4>Weekly Food Item Goals</h4>
+
+                        <!-- Summary Section -->
+                        <div id="food-summary-gcc"></div>
+
+                        <!-- Add New Goal Form -->
+                        <div class="form-row">
+                            <input
+                                type="text"
+                                id="food-category-gcc"
+                                placeholder="Item Category (e.g., Canned Tomatoes)"
+                            />
+                            <input
+                                type="number"
+                                id="food-amount-gcc"
+                                placeholder="Target Amount"
+                                min="1"
+                            />
+                            <input
+                                type="text"
+                                id="food-unit-gcc"
+                                placeholder="Unit (cans, lbs, bags)"
+                            />
+                            <button onclick="addFoodItemGoal('gcc')" class="btn btn-primary">
+                                <span style="margin-right: 0.5rem">➕</span> Add Food Goal
+                            </button>
+                        </div>
+
+                        <!-- Goals Display -->
+                        <div id="food-goals-gcc" class="food-goals-display"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- Volunteer Slots Tab -->
@@ -276,6 +360,8 @@
                                     <option value="almumineen">Al-Mumineen</option>
                                     <option value="alfajr">Al-Fajr</option>
                                     <option value="alhuda">Al-Huda</option>
+                                    <option value="alsalam">Al-Salam</option>
+                                    <option value="gcc">Geist Community Center</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -291,6 +377,11 @@
                 <div class="admin-section">
                     <h3>Existing Volunteer Slots</h3>
                     <div id="slots-list"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Item Donation Volunteers</h3>
+                    <div id="item-donations-list"></div>
                 </div>
             </div>
 
@@ -326,6 +417,12 @@
                         </button>
                         <button onclick="clearPantryDonations('alhuda')" class="btn btn-accent">
                             Clear Al-Huda
+                        </button>
+                        <button onclick="clearPantryDonations('alsalam')" class="btn btn-accent">
+                            Clear Al-Salam
+                        </button>
+                        <button onclick="clearPantryDonations('gcc')" class="btn btn-accent">
+                            Clear Geist Community Center
                         </button>
                         <button onclick="clearAllDonations()" class="btn btn-danger">
                             Clear All Donations
@@ -372,6 +469,24 @@
                                 onchange="loadDonationHistory()"
                             />
                             <span>Al-Huda</span>
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="alsalam"
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>Al-Salam</span>
+                        </label>
+                        <label>
+                            <input
+                                type="radio"
+                                name="pantryFilter"
+                                value="gcc"
+                                onchange="loadDonationHistory()"
+                            />
+                            <span>Geist Community Center</span>
                         </label>
                     </div>
 

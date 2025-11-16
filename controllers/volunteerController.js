@@ -2,6 +2,15 @@ const Database = require('better-sqlite3');
 const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pantry.db';
 const db = new Database(dbPath);
 
+function getMonday(date = new Date()) {
+    const d = new Date(date);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    d.setDate(diff);
+    d.setHours(0, 0, 0, 0);
+    return d.toISOString().split('T')[0];
+}
+
 // Get all volunteer slots
 exports.getAllSlots = (req, res) => {
     // Add WHERE clause to exclude completed slots
@@ -168,4 +177,109 @@ exports.markSlotComplete = (req, res) => {
         console.error('Error marking slot complete:', error);
         res.status(500).json({ error: 'Failed to mark slot complete' });
     }
+};
+
+// Get pantry addresses
+exports.getPantryAddresses = (req, res) => {
+    const addresses = {
+        almumineen: {
+            name: 'Al-Mumineen',
+            address: '4088 Millersville Rd, Indianapolis, IN 46205',
+            hours: 'Open from Fajr to Isha',
+            notes: 'If no one is available, items can be left in the multipurpose room',
+        },
+        alfajr: {
+            name: 'Al-Fajr',
+            address: '2846 Cold Spring Rd, Indianapolis, IN 46222',
+            hours: 'Please coordinate with pantry coordinator',
+            notes: '',
+        },
+        alhuda: {
+            name: 'Al-Huda',
+            address: '12213 Lantern Rd, Fishers, IN 46038',
+            hours: 'Please coordinate with pantry coordinator',
+            notes: '',
+        },
+        gcc: {
+            name: 'Geist Community Center',
+            address: '14500 E 96th St, McCordsville, IN 46055',
+            hours: 'Please coordinate with pantry coordinator',
+            notes: '',
+        },
+        alsalam: {
+            name: 'Al-Salam',
+            address: '9551 Valparaiso Ct, Indianapolis, IN 46268',
+            hours: 'Please coordinate with pantry coordinator',
+            notes: '',
+        },
+    };
+    res.json(addresses);
+};
+
+// Register item donation volunteer
+exports.registerItemDonationVolunteer = (req, res) => {
+    const { pantry, name, email, phone, items, date, time, notes } = req.body;
+
+    const stmt = db.prepare(`
+        INSERT INTO item_donation_volunteers (pantry, volunteer_name, volunteer_email, volunteer_phone, items, date, time, notes)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    stmt.run(pantry, name, email, phone, JSON.stringify(items), date, time, notes || '');
+
+    res.json({ success: true });
+};
+
+// Get item donation volunteers (admin)
+exports.getItemDonationVolunteers = (req, res) => {
+    const volunteers = db
+        .prepare(
+            `
+        SELECT * FROM item_donation_volunteers 
+        ORDER BY date DESC, time DESC
+    `
+        )
+        .all();
+
+    volunteers.forEach((v) => {
+        v.items = JSON.parse(v.items);
+    });
+
+    res.json(volunteers);
+};
+
+// Mark item donation as complete (admin)
+exports.markItemDonationComplete = (req, res) => {
+    if (!req.body.password || req.body.password !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { id } = req.params;
+
+    const donation = db.prepare('SELECT * FROM item_donation_volunteers WHERE id = ?').get(id);
+    if (!donation) return res.status(404).json({ error: 'Donation not found' });
+
+    const items = JSON.parse(donation.items);
+    const weekStart = getMonday(new Date(donation.date));
+
+    const insert = db.prepare(`
+        INSERT INTO food_item_achievements (pantry, category, amount, week_start)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(pantry, category, week_start) DO UPDATE SET amount = amount + excluded.amount
+    `);
+
+    const txn = db.transaction(() => {
+        items.forEach((item) => {
+            insert.run(donation.pantry, item.category, item.amount, weekStart);
+        });
+
+        db.prepare('UPDATE item_donation_volunteers SET status = ? WHERE id = ?').run(
+            'completed',
+            id
+        );
+    });
+
+    txn();
+
+    res.json({ success: true });
 };

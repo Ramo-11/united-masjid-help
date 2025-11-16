@@ -14,6 +14,7 @@ const dbPath = process.env.NODE_ENV === 'production' ? '/data/pantry.db' : 'pant
 const db = new Database(dbPath);
 
 // Initialize database tables
+db.exec(`DROP TABLE food_item_achievements;`);
 db.exec(`
   CREATE TABLE IF NOT EXISTS pantry_goals (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -96,7 +97,22 @@ CREATE TABLE IF NOT EXISTS food_item_achievements (
     category TEXT NOT NULL,
     amount INTEGER NOT NULL,
     recorded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    week_start DATE NOT NULL
+    week_start DATE NOT NULL,
+    UNIQUE(pantry, category, week_start)
+);
+
+CREATE TABLE IF NOT EXISTS item_donation_volunteers (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    pantry TEXT NOT NULL,
+    volunteer_name TEXT NOT NULL,
+    volunteer_email TEXT NOT NULL,
+    volunteer_phone TEXT NOT NULL,
+    items TEXT NOT NULL,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status TEXT DEFAULT 'scheduled'
 );
 
 `);
@@ -115,6 +131,17 @@ const initGoals = db.prepare(`INSERT OR IGNORE INTO pantry_goals (pantry, goal) 
 initGoals.run('almumineen', 500);
 initGoals.run('alfajr', 500);
 initGoals.run('alhuda', 500);
+initGoals.run('alsalam', 500);
+initGoals.run('gcc', 500);
+
+// Add new pantries to pantry_goals table
+const pantries = ['almumineen', 'alfajr', 'alhuda', 'gcc', 'alsalam'];
+pantries.forEach((pantry) => {
+    const exists = db.prepare('SELECT 1 FROM pantry_goals WHERE pantry = ?').get(pantry);
+    if (!exists) {
+        db.prepare('INSERT INTO pantry_goals (pantry, goal) VALUES (?, 500)').run(pantry);
+    }
+});
 
 // Middleware
 app.use(express.static('public'));
@@ -168,6 +195,10 @@ app.get('/api/admin/volunteers', volunteerController.getAllVolunteers);
 app.delete('/api/admin/volunteers/:slotId', volunteerController.clearVolunteers);
 app.put('/api/admin/slots/:id', volunteerController.updateSlot);
 app.post('/api/admin/slots/:id/complete', volunteerController.markSlotComplete);
+app.get('/api/pantry-addresses', volunteerController.getPantryAddresses);
+app.post('/api/item-donation-volunteer', volunteerController.registerItemDonationVolunteer);
+app.get('/api/admin/item-donation-volunteers', volunteerController.getItemDonationVolunteers);
+app.post('/api/admin/item-donation/:id/complete', volunteerController.markItemDonationComplete);
 
 // Media routes
 app.get('/api/media', mediaController.getAllMedia);
@@ -193,6 +224,10 @@ app.get('/donate.html', (req, res) => {
 
 app.get('/volunteer.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'volunteer.html'));
+});
+
+app.get('/volunteer-items.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'volunteer-items.html'));
 });
 
 app.get('/media.html', (req, res) => {

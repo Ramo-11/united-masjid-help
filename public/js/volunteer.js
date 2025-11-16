@@ -134,6 +134,8 @@ function getPantryDisplayName(pantry) {
         almumineen: 'Al-Mumineen',
         alfajr: 'Al-Fajr',
         alhuda: 'Al-Huda',
+        alsalam: 'Al-Salam',
+        gcc: 'Geist Community Center',
     };
     return names[pantry] || pantry;
 }

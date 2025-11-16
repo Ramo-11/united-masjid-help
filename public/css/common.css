@@ -125,10 +125,6 @@ a {
     transition: color var(--transition-base);
 }
 
-a:hover {
-    color: var(--primary-dark);
-}
-
 /* ============================================
    CONTAINER
    ============================================ */

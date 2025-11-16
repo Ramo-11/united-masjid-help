@@ -155,7 +155,7 @@ async function loadMediaPreview() {
 
 // Food Items Chart Display
 async function loadFoodItemsChart() {
-    const pantries = ['almumineen', 'alfajr', 'alhuda'];
+    const pantries = ['almumineen', 'alfajr', 'alhuda', 'alsalam', 'gcc'];
 
     for (const pantry of pantries) {
         try {
@@ -176,15 +176,12 @@ function createFoodItemsChart(pantry, goals) {
     if (!chartContainer) return;
 
     if (goals.length === 0) {
-        // Hide the container completely when no goals
         chartContainer.style.display = 'none';
         return;
     }
 
-    // Make sure it's visible when there are goals
     chartContainer.style.display = 'block';
 
-    // Create a simple bar chart using CSS
     let html = '<div class="food-needs-chart">';
     html += '<h4>Current Food Needs</h4>';
     html += '<div class="chart-bars">';
@@ -214,11 +211,11 @@ function createFoodItemsChart(pantry, goals) {
 
     html += '</div>';
 
-    // Add CTA section
+    // Updated CTA section with item donation option
     html += `
         <div class="food-needs-cta">
             <p>Help us meet our weekly food goals!</p>
-            <a href="/volunteer.html" class="btn btn-accent">Volunteer to Help</a>
+            <a href="/volunteer-items.html?pantry=${pantry}" class="btn btn-accent">Bring Items</a>
         </div>
     `;
 

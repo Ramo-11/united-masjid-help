@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bring Food Items - United Masjid Help</title>
+
+        <!-- CSS Files -->
+        <link rel="stylesheet" href="css/common.css" />
+        <link rel="stylesheet" href="css/navigation.css" />
+        <link rel="stylesheet" href="css/volunteer.css" />
+    </head>
+    <body>
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">
+                    <div class="navbar-logo">UMH</div>
+                    <span class="navbar-title">United Masjid Help</span>
+                </a>
+
+                <ul class="navbar-nav" id="navbarNav">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/volunteer.html" class="nav-link">Volunteer</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/media.html" class="nav-link">Gallery</a>
+                    </li>
+                </ul>
+
+                <div class="navbar-actions">
+                    <a href="#donate" class="navbar-cta">Donate Now</a>
+                </div>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Bring Food Items</h1>
+                <p>Help meet our food goals by bringing needed items directly to the pantry</p>
+            </div>
+        </section>
+
+        <main class="container">
+            <div class="form-container">
+                <h2>Sign Up to Bring Items to <span id="pantry-name"></span></h2>
+                <p>Select the items you can bring and when you'll deliver them.</p>
+
+                <form id="item-donation-form">
+                    <!-- Personal Info -->
+                    <div class="form-group">
+                        <label for="volunteer-name">Full Name *</label>
+                        <input type="text" id="volunteer-name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteer-email">Email *</label>
+                        <input type="email" id="volunteer-email" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="volunteer-phone">Phone Number *</label>
+                        <input
+                            type="tel"
+                            id="volunteer-phone"
+                            required
+                            placeholder="(123) 456-7890"
+                        />
+                    </div>
+
+                    <!-- Items Selection -->
+                    <div class="form-group">
+                        <label>Select Items You'll Bring *</label>
+                        <div id="food-items-list" class="items-grid">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Delivery Schedule -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="delivery-date">Delivery Date *</label>
+                            <input type="date" id="delivery-date" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="delivery-time">Approximate Time *</label>
+                            <select id="delivery-time" required>
+                                <option value="">Select time</option>
+                                <option value="Morning (8am-12pm)">Morning (8am-12pm)</option>
+                                <option value="Afternoon (12pm-4pm)">Afternoon (12pm-4pm)</option>
+                                <option value="Evening (4pm-8pm)">Evening (4pm-8pm)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Pantry Address Info -->
+                    <div class="volunteer-details" id="pantry-address-info">
+                        <h4>Delivery Location:</h4>
+                        <div id="address-details"></div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="form-group">
+                        <label for="notes">Additional Notes (Optional)</label>
+                        <textarea
+                            id="notes"
+                            rows="3"
+                            placeholder="Any special instructions or additional items"
+                        ></textarea>
+                    </div>
+
+                    <div class="button-group">
+                        <button type="submit" class="btn btn-primary">Confirm Item Donation</button>
+                        <button type="button" onclick="history.back()" class="btn btn-secondary">
+                            Back
+                        </button>
+                    </div>
+                </form>
+
+                <div id="success-message" class="success-message" style="display: none">
+                    <h3>✓ Thank you for signing up!</h3>
+                    <p>
+                        We've recorded your item donation commitment. See you on the delivery date!
+                    </p>
+                    <button onclick="location.href='/'" class="btn btn-primary">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer (same as other pages) -->
+
+        <script src="js/navigation.js"></script>
+        <script src="js/volunteer-items.js"></script>
+    </body>
+</html>

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         loadVolunteerSignups();
         loadDonationHistory();
         loadFoodItemGoals();
+        loadItemDonationVolunteers();
 
         document.getElementById('add-slot-form').addEventListener('submit', handleAddSlot);
     } catch (error) {
@@ -283,6 +284,12 @@ async function loadVolunteerSlots() {
                             <option value="alhuda" ${
                                 slot.pantry === 'alhuda' ? 'selected' : ''
                             }>Al-Huda</option>
+                            <option value="alsalam" ${
+                                slot.pantry === 'alsalam' ? 'selected' : ''
+                            }>Al-Salam</option>
+                            <option value="gcc" ${
+                                slot.pantry === 'alsgccalam' ? 'selected' : ''
+                            }>Geist Community Center</option>
                         </select>
                         <div style="margin-top: 1rem;">
                             <button onclick="saveSlotEdits('${
@@ -388,6 +395,8 @@ function getPantryDisplayName(pantry) {
         almumineen: 'Al-Mumineen',
         alfajr: 'Al-Fajr',
         alhuda: 'Al-Huda',
+        alsalam: 'Al-Salam',
+        gcc: 'Geist Community Center',
     };
     return names[pantry] || pantry;
 }
@@ -584,6 +593,8 @@ async function loadDonationHistory() {
             almumineen: 'Al-Mumineen',
             alfajr: 'Al-Fajr',
             alhuda: 'Al-Huda',
+            alsalam: 'Al-Salam',
+            gcc: 'Geist Community Center',
         };
 
         donations.forEach((donation) => {
@@ -637,6 +648,8 @@ async function exportDonations() {
             almumineen: 'Al-Mumineen',
             alfajr: 'Al-Fajr',
             alhuda: 'Al-Huda',
+            alsalam: 'Al-Salam',
+            gcc: 'Geist Community Center',
         };
 
         let csv = 'Date,Time,Pantry,Amount,Type,Details\n';
@@ -677,6 +690,8 @@ async function clearPantryDonations(pantry) {
         almumineen: 'Al-Mumineen',
         alfajr: 'Al-Fajr',
         alhuda: 'Al-Huda',
+        alsalam: 'Al-Salam',
+        gcc: 'Geist Community Center',
         all: 'ALL pantries',
     };
 
@@ -715,7 +730,7 @@ function clearAllDonations() {
 
 // Food Item Goals Management
 async function loadFoodItemGoals() {
-    const pantries = ['almumineen', 'alfajr', 'alhuda'];
+    const pantries = ['almumineen', 'alfajr', 'alhuda', 'alsalam', 'gcc'];
 
     for (const pantry of pantries) {
         try {
@@ -954,6 +969,76 @@ function showNotification(message, type = 'info') {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
     }, 3000);
+}
+
+async function loadItemDonationVolunteers() {
+    try {
+        const response = await fetch('/api/admin/item-donation-volunteers');
+        const volunteers = await response.json();
+        const container = document.getElementById('item-donations-list');
+
+        if (volunteers.length === 0) {
+            container.innerHTML = '<p class="no-data">No item donation sign-ups yet.</p>';
+            return;
+        }
+
+        let html = '<div class="signups-table"><table>';
+        html +=
+            '<thead><tr><th>Date</th><th>Time</th><th>Pantry</th><th>Volunteer</th><th>Items</th><th>Status</th><th>Actions</th></tr></thead>';
+        html += '<tbody>';
+
+        volunteers.forEach((v) => {
+            const date = new Date(v.date).toLocaleDateString();
+            const itemsList = v.items
+                .map((i) => `${i.category} (${i.amount} ${i.unit})`)
+                .join(', ');
+
+            html += `
+                <tr class="${v.status === 'completed' ? 'completed' : ''}">
+                    <td>${date}</td>
+                    <td>${v.time}</td>
+                    <td>${getPantryDisplayName(v.pantry)}</td>
+                    <td>${v.volunteer_name}<br><small>${v.volunteer_email}</small></td>
+                    <td>${itemsList}</td>
+                    <td><span class="badge ${
+                        v.status === 'completed' ? 'badge-success' : 'badge-warning'
+                    }">${v.status}</span></td>
+                    <td>
+                        ${
+                            v.status !== 'completed'
+                                ? `<button onclick="markItemDonationComplete(${v.id})" class="btn btn-sm btn-success">Mark Complete</button>`
+                                : 'Completed'
+                        }
+                    </td>
+                </tr>
+            `;
+        });
+
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading item donations:', error);
+    }
+}
+
+async function markItemDonationComplete(id) {
+    if (!confirm('Mark this item donation as complete?')) return;
+
+    try {
+        const response = await fetch(`/api/admin/item-donation/${id}/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: adminPassword }),
+        });
+
+        if (response.ok) {
+            loadItemDonationVolunteers();
+            showNotification('Item donation marked as complete', 'success');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showNotification('Error updating status', 'error');
+    }
 }
 
 async function addFoodItemGoal(pantry) {
