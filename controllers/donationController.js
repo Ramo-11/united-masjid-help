@@ -20,7 +20,7 @@ function getCurrentWeekTotal(pantry) {
         FROM donations 
         WHERE pantry = ?
     `);
-    const result = stmt.get(pantry, weekStart);
+    const result = stmt.get(pantry);
     return result.total;
 }
 
