@@ -18,7 +18,7 @@ function getCurrentWeekTotal(pantry) {
     const stmt = db.prepare(`
         SELECT COALESCE(SUM(amount), 0) as total 
         FROM donations 
-        WHERE pantry = ? AND DATE(created_at) >= ?
+        WHERE pantry = ?
     `);
     const result = stmt.get(pantry, weekStart);
     return result.total;
