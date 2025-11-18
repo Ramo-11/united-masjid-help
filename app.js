@@ -209,6 +209,7 @@ app.post('/api/admin/external-links', mediaController.addExternalLink);
 app.delete('/api/admin/external-links/:id', mediaController.deleteExternalLink);
 
 // Auth routes
+app.post('/api/admin/verify-password', authController.verifyPassword);
 app.post('/api/admin/verify', authController.verifyAdmin);
 app.get('/api/admin/check', authController.checkAdmin);
 app.post('/api/admin/logout', authController.logout);

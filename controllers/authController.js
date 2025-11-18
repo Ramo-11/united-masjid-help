@@ -10,6 +10,16 @@ exports.verifyAdmin = (req, res) => {
     }
 };
 
+exports.verifyPassword = (req, res) => {
+    const { password } = req.body;
+
+    if (password === process.env.ADMIN_PASSWORD) {
+        res.json({ valid: true });
+    } else {
+        res.status(401).json({ valid: false });
+    }
+};
+
 // Check admin authentication
 exports.checkAdmin = (req, res) => {
     res.json({ authenticated: req.session.adminAuthenticated === true });

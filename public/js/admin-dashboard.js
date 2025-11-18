@@ -21,7 +21,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                 window.location.href = 'admin-login.html';
                 return;
             }
-            sessionStorage.setItem('adminPassword', adminPassword);
+
+            // Verify the password immediately
+            try {
+                const verifyResponse = await fetch('/api/admin/verify-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: adminPassword }),
+                });
+
+                if (!verifyResponse.ok) {
+                    alert('Invalid password. Please try again.');
+                    window.location.href = 'admin-login.html';
+                    return;
+                }
+
+                sessionStorage.setItem('adminPassword', adminPassword);
+            } catch (error) {
+                console.error('Password verification failed:', error);
+                window.location.href = 'admin-login.html';
+                return;
+            }
         }
 
         loadPantryGoals();
