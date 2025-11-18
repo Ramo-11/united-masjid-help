@@ -96,14 +96,13 @@ async function loadMediaPreview() {
             }
         });
 
-        // Add YouTube videos
+        // Add YouTube videos with embed support
         externalLinks.forEach((link) => {
-            if (link.type === 'youtube' && link.thumbnail) {
+            if (link.type === 'youtube' && link.embedUrl) {
                 allMedia.push({
                     type: 'youtube',
                     title: link.title,
-                    thumbnail: link.thumbnail,
-                    url: link.url,
+                    embedUrl: link.embedUrl,
                     created_at: link.created_at,
                 });
             }
@@ -121,25 +120,40 @@ async function loadMediaPreview() {
 
         let html = '';
         previewItems.forEach((item) => {
-            const typeLabel =
-                item.type === 'youtube' ? 'YouTube' : item.type === 'video' ? 'Video' : 'Photo';
-
-            html += `
-                <div class="media-preview-item" onclick="window.location.href='/media.html'">
-                    <img src="${item.thumbnail}" alt="${escapeHtml(
-                item.title
-            )}" class="media-preview-image">
-                    <div class="media-preview-overlay">
-                        <h3 class="media-preview-title">${escapeHtml(item.title)}</h3>
+            if (item.type === 'youtube') {
+                // YouTube embed
+                html += `
+                    <div class="media-preview-item">
+                        <iframe 
+                            src="${item.embedUrl}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; border-radius: 12px;">
+                        </iframe>
+                        <span class="media-preview-type">YouTube</span>
                     </div>
-                    <span class="media-preview-type">${typeLabel}</span>
-                    ${
-                        item.type === 'video' || item.type === 'youtube'
-                            ? '<div class="play-overlay" style="width: 50px; height: 50px;"></div>'
-                            : ''
-                    }
-                </div>
-            `;
+                `;
+            } else {
+                // Photo or video
+                const typeLabel = item.type === 'video' ? 'Video' : 'Photo';
+                html += `
+                    <div class="media-preview-item" onclick="window.location.href='/media.html'">
+                        <img src="${item.thumbnail}" alt="${escapeHtml(
+                    item.title
+                )}" class="media-preview-image">
+                        <div class="media-preview-overlay">
+                            <h3 class="media-preview-title">${escapeHtml(item.title)}</h3>
+                        </div>
+                        <span class="media-preview-type">${typeLabel}</span>
+                        ${
+                            item.type === 'video'
+                                ? '<div class="play-overlay" style="width: 50px; height: 50px;"></div>'
+                                : ''
+                        }
+                    </div>
+                `;
+            }
         });
 
         previewContainer.innerHTML = html;

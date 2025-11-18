@@ -295,15 +295,13 @@
 }
 
 .media-preview-item {
-    background: white;
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: all var(--transition-slow);
-    cursor: pointer;
     position: relative;
-    aspect-ratio: 16 / 9;
-    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    cursor: pointer;
 }
 
 .media-preview-item:hover {
