@@ -133,9 +133,10 @@ initGoals.run('alfajr', 500);
 initGoals.run('alhuda', 500);
 initGoals.run('alsalam', 500);
 initGoals.run('gcc', 500);
+initGoals.run('toubagardens', 0);
 
 // Add new pantries to pantry_goals table
-const pantries = ['almumineen', 'alfajr', 'alhuda', 'gcc', 'alsalam'];
+const pantries = ['almumineen', 'alfajr', 'alhuda', 'gcc', 'alsalam', 'toubagardens'];
 pantries.forEach((pantry) => {
     const exists = db.prepare('SELECT 1 FROM pantry_goals WHERE pantry = ?').get(pantry);
     if (!exists) {

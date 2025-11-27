@@ -472,6 +472,85 @@
     border-color: var(--primary-light);
 }
 
+/* Touba Gardens Zelle Modal */
+.touba-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.touba-modal-content {
+    background: white;
+    padding: 2.5rem;
+    border-radius: var(--border-radius);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    text-align: center;
+}
+
+.touba-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    line-height: 1;
+}
+
+.touba-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.touba-modal-content h2 {
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.touba-modal-content > p {
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+}
+
+.zelle-options {
+    text-align: center;
+}
+
+.zelle-option {
+    padding: 1.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.zelle-option h4 {
+    color: var(--primary-dark);
+    margin-bottom: 0.75rem;
+}
+
+.zelle-option p {
+    margin: 0.5rem 0;
+    color: var(--text-primary);
+}
+
+.zelle-divider {
+    color: var(--text-secondary);
+    font-weight: 600;
+    margin: 1rem 0;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .intro-section {

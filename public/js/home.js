@@ -287,3 +287,29 @@ document.querySelectorAll('a[href="#donate"]').forEach((link) => {
         }
     });
 });
+
+// Touba Gardens Modal Functions
+function openToubaGardensModal() {
+    document.getElementById('toubaGardensModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeToubaGardensModal() {
+    document.getElementById('toubaGardensModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// Close modal on background click
+document.addEventListener('click', function (e) {
+    const modal = document.getElementById('toubaGardensModal');
+    if (e.target === modal) {
+        closeToubaGardensModal();
+    }
+});
+
+// Close modal on Escape key
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeToubaGardensModal();
+    }
+});
