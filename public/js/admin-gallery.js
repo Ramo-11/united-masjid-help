@@ -241,11 +241,12 @@ async function loadAdminGallery() {
             } • Uploaded ${date}
                 </p>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary" onclick='openEditModal(
-                        ${JSON.stringify(group.group_id)},
-                        ${JSON.stringify(group.title || '')},
-                        ${JSON.stringify(group.description || '')}
-                    )'>
+                    <button class="btn btn-secondary" 
+                        onclick="openEditModal(
+                            ${JSON.stringify(group.group_id)},
+                            ${JSON.stringify(group.title || '')},
+                            ${JSON.stringify(group.description || '')}
+                        )">
                         Edit Details
                     </button>
                     <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
