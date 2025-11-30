@@ -1,16 +1,29 @@
 // Admin Gallery Management
 let selectedFiles = [];
 
+// Initialize
 document.addEventListener('DOMContentLoaded', function () {
     setupFileUpload();
     loadAdminGallery();
     loadExternalLinks();
+
+    // Event Delegation for Edit Buttons
+    // This is the industry standard way to handle events for dynamically created elements
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('edit-media-btn')) {
+            const btn = e.target;
+            const groupId = btn.dataset.groupId;
+            const title = btn.dataset.title;
+            const description = btn.dataset.description;
+
+            openEditModal(groupId, title, description);
+        }
+    });
 });
 
 function setupFileUpload() {
     const uploadArea = document.getElementById('file-upload-area');
     const fileInput = document.getElementById('media-file');
-    const previewArea = document.getElementById('preview-area');
 
     // Click to upload
     uploadArea.addEventListener('click', () => fileInput.click());
@@ -110,11 +123,37 @@ function removeIndividualPreview(index) {
     if (selectedFiles.length === 0) {
         removePreview();
     } else {
-        handleFileSelect([]);
-        const fileInput = document.getElementById('media-file');
-        const dt = new DataTransfer();
-        selectedFiles.forEach((file) => dt.items.add(file));
-        fileInput.files = dt.files;
+        handleFileSelect([]); // Clear and re-render logic handled by just resetting input for now
+        // But better logic is to reconstruct FileList, which is hard in JS.
+        // Simple hack: Re-render preview from selectedFiles array
+
+        // Clear UI first
+        const previewContainer = document.getElementById('preview-container');
+        previewContainer.innerHTML = '';
+
+        // Re-render
+        selectedFiles.forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const previewItem = document.createElement('div');
+                previewItem.className = 'preview-item';
+
+                // Copy-paste render logic from above or extract to function
+                if (file.type.startsWith('video/')) {
+                    previewItem.innerHTML = `
+                        <video src="${e.target.result}" controls></video>
+                        <button class="remove-preview-item" onclick="removeIndividualPreview(${idx})">×</button>
+                    `;
+                } else {
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button class="remove-preview-item" onclick="removeIndividualPreview(${idx})">×</button>
+                    `;
+                }
+                previewContainer.appendChild(previewItem);
+            };
+            reader.readAsDataURL(file);
+        });
     }
 }
 
@@ -142,7 +181,7 @@ async function uploadMedia(e) {
     });
     formData.append('title', title);
     formData.append('description', description);
-    formData.append('password', adminPassword);
+    formData.append('password', adminPassword); // Assumes adminPassword is global from admin-dashboard.js
 
     const uploadProgress = document.getElementById('upload-progress');
     const progressFill = document.getElementById('progress-fill-upload');
@@ -222,35 +261,38 @@ async function loadAdminGallery() {
             const firstItem = group.items[0];
             const mediaCount = group.items.length;
 
+            // Use data attributes to store values safely
+            // escapeHtml ensures that quotes inside the title/description don't break the HTML attribute
             html += `
         <div class="gallery-item-admin">
             <div class="media-container">
                 ${
                     firstItem.type === 'video'
                         ? `<video src="${firstItem.url}" controls></video>`
-                        : `<img src="${firstItem.url}" alt="${group.title || 'Gallery image'}" />`
+                        : `<img src="${firstItem.url}" alt="${escapeHtml(
+                              group.title || 'Gallery image'
+                          )}" />`
                 }
                 ${mediaCount > 1 ? `<div class="media-count-badge">${mediaCount} items</div>` : ''}
             </div>
             <div class="media-info-admin">
-                ${group.title ? `<h4>${group.title}</h4>` : '<h4>Untitled</h4>'}
-                ${group.description ? `<p>${group.description}</p>` : ''}
+                ${group.title ? `<h4>${escapeHtml(group.title)}</h4>` : '<h4>Untitled</h4>'}
+                ${group.description ? `<p>${escapeHtml(group.description)}</p>` : ''}
                 <p class="media-meta">
                     ${firstItem.type === 'video' ? '▶ Video' : '📷 Photo'}${
                 mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
             } • Uploaded ${date}
                 </p>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button class="btn btn-secondary" 
-                        onclick="openEditModal(
-                            ${JSON.stringify(group.group_id)},
-                            ${JSON.stringify(group.title || '')},
-                            ${JSON.stringify(group.description || '')}
-                        )">
+                    <button class="btn btn-secondary edit-media-btn" 
+                        data-group-id="${group.group_id}"
+                        data-title="${escapeHtml(group.title || '')}"
+                        data-description="${escapeHtml(group.description || '')}">
                         Edit Details
                     </button>
                     <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
-                group.title || 'this media group'
+                escapeHtml(group.title || 'this media group').replace(/'/g, "\\'")
+                /* Note: Delete still uses inline JS for simplicity, but we escape single quotes explicitly for the confirm dialog */
             }')">
                         Delete ${mediaCount > 1 ? 'Group' : ''}
                     </button>
@@ -354,19 +396,19 @@ async function loadExternalLinks() {
             html += `
         <div class="gallery-item-admin">
             <div class="media-info-admin">
-                <h4>${link.title}</h4>
-                ${link.description ? `<p>${link.description}</p>` : ''}
+                <h4>${escapeHtml(link.title)}</h4>
+                ${link.description ? `<p>${escapeHtml(link.description)}</p>` : ''}
                 <p style="font-size: 0.9rem; color: #667eea; word-break: break-all; margin-top: 0.5rem;">
-                    <a href="${link.url}" target="_blank" rel="noopener">${link.url}</a>
+                    <a href="${link.url}" target="_blank" rel="noopener">${escapeHtml(link.url)}</a>
                 </p>
                 <p class="media-meta">
-                    ${typeIcons[link.type]} ${
+                    ${typeIcons[link.type] || '🔗'} ${
                 link.type.charAt(0).toUpperCase() + link.type.slice(1)
             } • Added ${date}
                 </p>
-                <button class="delete-btn" onclick="deleteExternalLink(${link.id}, '${
+                <button class="delete-btn" onclick="deleteExternalLink(${link.id}, '${escapeHtml(
                 link.title
-            }')">
+            ).replace(/'/g, "\\'")}')">
                     Delete
                 </button>
             </div>
@@ -409,6 +451,8 @@ async function deleteExternalLink(linkId, linkTitle) {
 function openEditModal(groupId, currentTitle, currentDescription) {
     const modal = document.createElement('div');
     modal.className = 'edit-modal';
+
+    // Note: escapeHtml is used here on values to prevent HTML injection into input values
     modal.innerHTML = `
         <div class="edit-modal-content">
             <div class="edit-modal-header">
@@ -473,8 +517,13 @@ async function saveMediaEdit(event, groupId) {
     }
 }
 
+// Utility to safely escape HTML to prevent XSS and attribute breaking
 function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+    if (!text) return '';
+    return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
