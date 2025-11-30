@@ -208,6 +208,7 @@ app.delete('/api/admin/media/group/:groupId', mediaController.deleteMediaGroup);
 app.get('/api/external-links', mediaController.getAllExternalLinks);
 app.post('/api/admin/external-links', mediaController.addExternalLink);
 app.delete('/api/admin/external-links/:id', mediaController.deleteExternalLink);
+app.put('/api/admin/media/:groupId', mediaController.updateMediaMetadata);
 
 // Auth routes
 app.post('/api/admin/verify-password', authController.verifyPassword);

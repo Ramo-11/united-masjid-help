@@ -551,6 +551,38 @@
     margin: 1rem 0;
 }
 
+/* Food Chart Toggle */
+.food-chart-wrapper {
+    margin: 1.5rem 0;
+}
+
+.toggle-food-chart {
+    transition: all var(--transition-base);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.toggle-food-chart::after {
+    content: '▼';
+    transition: transform var(--transition-base);
+    font-size: 0.8em;
+}
+
+.toggle-food-chart.btn-accent::after {
+    transform: rotate(180deg);
+}
+
+.toggle-food-chart:hover {
+    transform: translateY(-1px);
+}
+
+.food-chart-container {
+    animation: slideDown var(--transition-slow) ease-out;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .intro-section {

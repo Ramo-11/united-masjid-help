@@ -240,6 +240,25 @@ async function loadAdminGallery() {
                 mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
             } • Uploaded ${date}
                 </p>
+                <p class="media-meta">
+                    ${firstItem.type === 'video' ? '▶ Video' : '📷 Photo'}${
+                mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
+            } • Uploaded ${date}
+                </p>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="btn btn-secondary" onclick="openEditModal('${
+                        group.group_id
+                    }', '${escapeHtml(group.title || '')}', '${escapeHtml(
+                group.description || ''
+            )}')">
+                        Edit Details
+                    </button>
+                    <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
+                group.title || 'this media group'
+            }')">
+                        Delete ${mediaCount > 1 ? 'Group' : ''}
+                    </button>
+                </div>
                 <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
                 group.title || 'this media group'
             }')">
@@ -394,4 +413,77 @@ async function deleteExternalLink(linkId, linkTitle) {
         console.error('Error:', error);
         alert('Error deleting link.');
     }
+}
+
+function openEditModal(groupId, currentTitle, currentDescription) {
+    const modal = document.createElement('div');
+    modal.className = 'edit-modal';
+    modal.innerHTML = `
+        <div class="edit-modal-content">
+            <div class="edit-modal-header">
+                <h3>Edit Media Details</h3>
+                <button class="edit-modal-close" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="edit-media-form" onsubmit="saveMediaEdit(event, '${groupId}')">
+                <div class="form-group">
+                    <label for="edit-title">Title</label>
+                    <input type="text" id="edit-title" value="${escapeHtml(
+                        currentTitle || ''
+                    )}" placeholder="Enter title" />
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Description</label>
+                    <textarea id="edit-description" rows="3" placeholder="Enter description">${escapeHtml(
+                        currentDescription || ''
+                    )}</textarea>
+                </div>
+                <div class="edit-modal-actions">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+                </div>
+            </form>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeEditModal() {
+    const modal = document.querySelector('.edit-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => modal.remove(), 300);
+    }
+}
+
+async function saveMediaEdit(event, groupId) {
+    event.preventDefault();
+
+    const title = document.getElementById('edit-title').value.trim();
+    const description = document.getElementById('edit-description').value.trim();
+
+    try {
+        const response = await fetch(`/api/admin/media/${groupId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: adminPassword, title, description }),
+        });
+
+        if (response.ok) {
+            alert('Media updated successfully!');
+            closeEditModal();
+            loadAdminGallery();
+        } else {
+            alert('Error updating media.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error updating media.');
+    }
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }

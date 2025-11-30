@@ -189,14 +189,21 @@ async function loadFoodItemsChart() {
 
 function createFoodItemsChart(pantry, goals) {
     const chartContainer = document.getElementById(`food-chart-${pantry}`);
-    if (!chartContainer) return;
+    const toggleBtn = document.getElementById(`toggle-btn-${pantry}`);
+
+    if (!chartContainer || !toggleBtn) return;
 
     if (goals.length === 0) {
         chartContainer.style.display = 'none';
+        toggleBtn.style.display = 'none';
         return;
     }
 
-    chartContainer.style.display = 'block';
+    // Show the toggle button
+    toggleBtn.style.display = 'block';
+
+    // Keep chart hidden by default
+    chartContainer.style.display = 'none';
 
     // Check if all goals are complete
     const allComplete = goals.every((goal) => goal.achieved >= goal.amount);
@@ -258,6 +265,23 @@ function createFoodItemsChart(pantry, goals) {
 
     html += '</div>';
     chartContainer.innerHTML = html;
+}
+
+function toggleFoodChart(pantry) {
+    const chartContainer = document.getElementById(`food-chart-${pantry}`);
+    const toggleBtn = document.getElementById(`toggle-btn-${pantry}`);
+
+    if (chartContainer.style.display === 'none') {
+        chartContainer.style.display = 'block';
+        toggleBtn.textContent = 'Hide Food Needs';
+        toggleBtn.classList.remove('btn-secondary');
+        toggleBtn.classList.add('btn-accent');
+    } else {
+        chartContainer.style.display = 'none';
+        toggleBtn.textContent = 'View Food Needs';
+        toggleBtn.classList.remove('btn-accent');
+        toggleBtn.classList.add('btn-secondary');
+    }
 }
 
 // Utility function to escape HTML

@@ -123,6 +123,29 @@ exports.deleteMediaGroup = async (req, res) => {
     }
 };
 
+// Update media metadata (admin)
+exports.updateMediaMetadata = async (req, res) => {
+    if (!req.body.password || req.body.password !== process.env.ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { groupId } = req.params;
+    const { title, description } = req.body;
+
+    try {
+        db.prepare('UPDATE media_gallery SET title = ?, description = ? WHERE group_id = ?').run(
+            title || '',
+            description || '',
+            groupId
+        );
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Update error:', error);
+        res.status(500).json({ error: 'Update failed' });
+    }
+};
+
 // Get all external links
 exports.getAllExternalLinks = (req, res) => {
     const links = db.prepare('SELECT * FROM external_links ORDER BY created_at DESC').all();
