@@ -240,11 +240,6 @@ async function loadAdminGallery() {
                 mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
             } • Uploaded ${date}
                 </p>
-                <p class="media-meta">
-                    ${firstItem.type === 'video' ? '▶ Video' : '📷 Photo'}${
-                mediaCount > 1 ? ` +${mediaCount - 1} more` : ''
-            } • Uploaded ${date}
-                </p>
                 <div style="display: flex; gap: 0.5rem;">
                     <button class="btn btn-secondary" onclick="openEditModal('${
                         group.group_id
@@ -259,11 +254,6 @@ async function loadAdminGallery() {
                         Delete ${mediaCount > 1 ? 'Group' : ''}
                     </button>
                 </div>
-                <button class="delete-btn" onclick="deleteMediaGroup('${group.group_id}', '${
-                group.title || 'this media group'
-            }')">
-                    Delete ${mediaCount > 1 ? 'Group' : ''}
-                </button>
             </div>
         </div>
     `;
